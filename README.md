@@ -6,7 +6,7 @@
 
 `HostelPulse Uganda` is a full-stack mobile application designed to solve the unique challenges of finding and managing student hostels in Uganda. It empowers students to discover, book, and communicate with hostel managers effortlessly, while providing managers with a powerful tool to streamline their operations.
 
-[![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
+[![React](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
@@ -64,7 +64,7 @@ HostelPulse Uganda brings the entire hostel ecosystem into one, easy-to-use app.
 
 This project is built with a modern, scalable technology stack:
 
-- **Frontend (Mobile):** React Native (for cross-platform iOS & Android development)
+- **Frontend (Client):** Reacct
 - **Backend (Server):** Node.js with Express.js
 - **Database:** MongoDB with Mongoose ODM
 - **Authentication:** JWT (JSON Web Tokens)
@@ -76,7 +76,7 @@ This project is built with a modern, scalable technology stack:
 
 ```bash
 hostel-booking-app/
-├── client/                 # React Native frontend application
+├── client/                 # React frontend application
 │   ├── src/
 │   │   ├── components/     # Reusable UI components
 │   │   ├── screens/        # App screens (Home, Search, Profile, etc.)
@@ -101,7 +101,7 @@ hostel-booking-app/
 - Node.js (v16 or higher)
 - npm or yarn
 - MongoDB Atlas account or local MongoDB instance
-- React Native CLI environment set up
+- React CLI environment set up
 
 1.  **Clone the repository:**
     ```bash
@@ -121,12 +121,7 @@ hostel-booking-app/
     ```bash
     cd ../client
     npm install
-    # For Android
-    npx react-native run-android
-    # For iOS
-    npx react-native run-ios
-    ```
-
+  
 ## Contributing
 
 We welcome contributions! If you'd like to help improve HostelPulse Uganda, please follow these steps:
@@ -141,18 +136,19 @@ Please read our `CONTRIBUTING.md` (to be created) for detailed guidelines.
 
 ## Team
 
-- **[Your Name]** - *Project Lead & Developer* - [Your GitHub Profile Link]
+- **SSEWANTE LIVINGSTONE** - *Project Lead & Developer* - (https://github.com/ssewanteLivingstone)
 - **[Team Member 2]** - *Role* - [GitHub Profile Link]
 - **[Team Member 3]** - *Role* - [GitHub Profile Link]
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007 - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgements
 
 - Inspiration from the challenges faced by Ugandan students.
-- Thanks to the open-source communities of React Native, Node.js, and MongoDB.
+- Thanks to the open-source communities of React , Node.js, and MongoDB.
 - University communities for their feedback and support.
 
 ---
