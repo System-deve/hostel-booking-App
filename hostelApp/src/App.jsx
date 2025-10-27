@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { LoginForm, SignupForm } from './components/Login-Signup.jsx'
+import { LoginForm } from './components/login.jsx'
+import { SignupForm } from './components/signIn.jsx'
  function App() {
             const [currentForm, setCurrentForm] = useState('login');
             
