@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+{/*import React, { useState } from 'react'
 import { LoginForm } from './components/login.jsx'
 import { SignupForm } from './components/signIn.jsx'
  function App() {
@@ -19,4 +19,19 @@ import { SignupForm } from './components/signIn.jsx'
             );
         }
 
-        export default App;
+        export default App;*/}
+
+// src/App.js
+import React from 'react';
+import Dashboard from './components/dashboard/Dashboard';
+import './styles/dashboard.css';
+
+function App() {
+  return (
+    <div className="App">
+      <Dashboard />
+    </div>
+  );
+}
+
+export default App;
