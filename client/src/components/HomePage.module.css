@@ -7,9 +7,9 @@
 
 /* Section */
 .section {
-  max-width: 1400px;
+  /* max-width: 1400px; */
   margin: 0 auto;
-  padding: 120px 32px 80px;
+  padding: 60px 32px 80px;
 }
 
 .sectionHeader {
