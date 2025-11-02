@@ -1,0 +1,140 @@
+.section {
+  margin: 0 auto;
+  padding: 60px 32px 80px;
+}
+.typesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+@media (min-width: 768px) {
+  .typesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .typesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.typeCard {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 360px;
+  cursor: pointer;
+}
+
+.typeImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.typeCard:hover .typeImage {
+  transform: scale(1.15);
+}
+
+.typeOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.85) 100%);
+}
+
+.typeCount {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: white;
+  color: #ef4444;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.typeInfo {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+}
+
+.typeTitle {
+  color: white;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.typeDescription {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* CTA Box */
+.ctaBox {
+  margin-top: 48px;
+  background: linear-gradient(135deg, #67e8f9 0%, #3b82f6 100%);
+  border-radius: 24px;
+  padding: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+
+.ctaContent {
+  flex: 1;
+  min-width: 300px;
+}
+
+.ctaLabel {
+  color: #1e1b4b;
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.ctaTitle {
+  font-size: 36px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.ctaLargeButton {
+  background: #fbbf24;
+  color: #1e1b4b;
+  padding: 16px 32px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  font-size: 16px;
+}
+
+.ctaLargeButton:hover {
+  background: #f59e0b;
+  transform: translateY(-2px);
+}
+
+.ctaImage {
+  width: 280px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 16px;
+}
