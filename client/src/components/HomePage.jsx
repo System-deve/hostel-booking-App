@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import {  ChevronRight, Star, Phone, MapPin, Clock, Search, X, Plus, Bed, Users, MessageCircle, Instagram, Facebook, Twitter, Youtube, Wifi, Coffee, MapPinned, Shield } from 'lucide-react';
 import Header from './header/header';
 import styles from './homePage.module.css';
+import Hero from './Hero/hero'
 
 export default function HostelBookingApp() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openFaq, setOpenFaq] = useState(1);
 
-  const heroImages = [
-    "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&h=300&fit=crop",
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&fit=crop",
-    "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop"
-  ];
+  
 
   const hostels = [
     {
@@ -116,61 +113,7 @@ export default function HostelBookingApp() {
      
 
       {/* Hero Section */}
-      <section className={styles.hero}>
-        <div className={styles.heroBackground}></div>
-        <div className={styles.heroOverlay}></div>
-        
-        <div className={styles.heroContent}>
-          <div className={styles.heroText}>
-           
-            <h1 className={styles.heroTitle}>
-              From any location
-            </h1>
-            <p className={styles.heroSubtitle}>
-              Connect to any hostel, save money, and experience authentic local culture. Book from thousands of verified hostels in Uganda.
-            </p>
-            
-            
-             {/* Search Box */}
-         <div className={styles.searchBoxWrapper}>
-          <div className={styles.searchBox}>
-            <div className={styles.searchFields}>
-              <div className={styles.searchField}>
-                <label className={styles.searchLabel}>Destination</label>
-                <select className={styles.searchInput}>
-                  <option>🌍 Where are you going?</option>
-                </select>
-              </div>
-              
-              <div className={styles.searchField}>
-                <label className={styles.searchLabel}>Check-out</label>
-                <input type="date" className={styles.searchInput} />
-              </div>
-              
-              <div className={styles.searchField}>
-                <label className={styles.searchLabel}>Room Type</label>
-                <select className={styles.searchInput}>
-                  <option>🛏️ Dorm or Private?</option>
-                </select>
-              </div>
-            </div>
-            <button className={styles.searchButton}>
-              <Search size={20} className={styles.searchIcon} />
-              Search Hostels
-            </button>
-          </div>
-        </div>
-          </div>
-
-          <div className={styles.heroImages}>
-            {heroImages.map((img, i) => (
-              <img key={i} src={img} alt="" className={styles.heroImage} />
-            ))}
-          </div>
-        </div>
-
-       
-      </section>
+      <Hero/>
 
       {/* Top Hostels */}
       <section className={styles.section}>
