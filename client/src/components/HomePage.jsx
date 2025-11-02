@@ -3,51 +3,14 @@ import {  ChevronRight, Star, Phone, MapPin, Clock, Search, X, Plus, Bed, Users,
 import Header from './header/header';
 import styles from './homePage.module.css';
 import Hero from './Hero/hero'
-
+import TopRatedHostels from './sections/topRatedHostels/TopRatedHostels';
 export default function HostelBookingApp() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openFaq, setOpenFaq] = useState(1);
 
   
 
-  const hostels = [
-    {
-      image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&h=300&fit=crop",
-      rating: 4.8,
-      reviews: 892,
-      name: "Downtown Backpackers Hostel",
-      location: "Berlin, Germany",
-      amenities: ["Free WiFi", "Kitchen", "Lockers"],
-      price: 18.50
-    },
-    {
-      image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&fit=crop",
-      rating: 4.9,
-      reviews: 1023,
-      name: "Surf & Stay Beach Hostel",
-      location: "Barcelona, Spain",
-      amenities: ["Beach Access", "Bar", "Pool"],
-      price: 22.00
-    },
-    {
-      image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop",
-      rating: 4.7,
-      reviews: 745,
-      name: "Old Town Social Hostel",
-      location: "Prague, Czech Republic",
-      amenities: ["Free Breakfast", "Tours", "WiFi"],
-      price: 15.90
-    },
-    {
-      image: "https://images.unsplash.com/photo-1626600174478-e6df78e1600c?w=400&h=300&fit=crop",
-      rating: 4.9,
-      reviews: 956,
-      name: "Mountain View Hostel",
-      location: "Interlaken, Switzerland",
-      amenities: ["Mountain Views", "Kitchen", "Lockers"],
-      price: 28.00
-    }
-  ];
+ 
 
   const cities = [
     { name: "Amsterdam", country: "Netherlands", image: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=300&h=300&fit=crop" },
@@ -72,12 +35,12 @@ export default function HostelBookingApp() {
     {
       id: 1,
       question: "How do I book a hostel bed on your platform?",
-      answer: "Simply search for your destination, select your dates, choose between dorm beds or private rooms, and complete the booking. You'll receive instant confirmation via email. Our platform shows real-time availability and secure payment options."
+      answer: "Simply browse through our available hostels click on it and follow the next steps, if you have not logged in , u may need to provide your login credentials to confirm our booking. Then select your favorable payment option and continue to place in your secrete pin"
     },
     {
       id: 2,
-      question: "What's the difference between dorm beds and private rooms?",
-      answer: "Dorm beds are shared rooms with multiple beds (4-12 people), perfect for budget travelers. Private rooms offer more privacy with 1-2 beds, ideal for couples or those wanting personal space."
+      question: "How do I pay for my booking?",
+      answer: "We accept various payment methods, including credit cards and online payment platforms. You'll be prompted to pay during the booking process."
     },
     {
       id: 3,
@@ -86,8 +49,8 @@ export default function HostelBookingApp() {
     },
     {
       id: 4,
-      question: "Are hostels safe for solo travelers?",
-      answer: "Yes! Most hostels have lockers, 24/7 reception, CCTV, and key card access. We only list verified hostels with good safety ratings."
+      question: "What if I have issues with my hostel room?",
+      answer: "There is a report section where one can report the situation at the hostel. for this immediate action is taken but our hostel are examined to check if they meet standards"
     },
     {
       id: 5,
@@ -116,52 +79,7 @@ export default function HostelBookingApp() {
       <Hero/>
 
       {/* Top Hostels */}
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <div className={styles.badge}>Featured Hostels</div>
-          <h2 className={styles.sectionTitle}>Top Rated Hostels</h2>
-          <p className={styles.sectionSubtitle}>
-            Handpicked hostels loved by backpackers worldwide. Great vibes, clean facilities, and unforgettable experiences guaranteed!
-          </p>
-        </div>
-
-        <div className={styles.hostelGrid}>
-          {hostels.map((hostel, i) => (
-            <div key={i} className={styles.hostelCard}>
-              <div className={styles.hostelImageWrapper}>
-                <img src={hostel.image} alt={hostel.name} className={styles.hostelImage} />
-                <div className={styles.hostelBadge}>
-                  ⭐ Top Rated
-                </div>
-              </div>
-              <div className={styles.hostelInfo}>
-                <div className={styles.hostelRating}>
-                  <Star size={16} fill="currentColor" className={styles.starIcon} />
-                  <span className={styles.ratingScore}>{hostel.rating}</span>
-                  <span className={styles.ratingReviews}>({hostel.reviews} reviews)</span>
-                </div>
-                <h3 className={styles.hostelName}>{hostel.name}</h3>
-                <div className={styles.hostelLocation}>
-                  <MapPin size={14} />
-                  <span>{hostel.location}</span>
-                </div>
-                <div className={styles.hostelAmenities}>
-                  {hostel.amenities.map((amenity, idx) => (
-                    <span key={idx} className={styles.amenity}>{amenity}</span>
-                  ))}
-                </div>
-                <div className={styles.hostelFooter}>
-                  <div className={styles.hostelPrice}>
-                    <span className={styles.priceAmount}>${hostel.price}</span>
-                    <span className={styles.priceLabel}> /night</span>
-                  </div>
-                  <button className={styles.bookButton}>Book Now</button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <TopRatedHostels/>
 
       {/* Popular Destinations */}
       <section className={styles.destinationsSection}>
@@ -228,7 +146,7 @@ export default function HostelBookingApp() {
             <div className={styles.badge}>Got Questions?</div>
             <h2 className={styles.sectionTitle}>Frequently Asked Questions</h2>
             <p className={styles.sectionSubtitle}>
-              Everything you need to know about booking hostels with HostelHub
+              Everything you need to know about booking hostels with Agiza Hosteli
             </p>
           </div>
 
@@ -267,15 +185,15 @@ export default function HostelBookingApp() {
             <div className={styles.footerBrand}>
               <div className={styles.footerLogo}>
                 <Bed size={32} className={styles.logoIcon} />
-                <span className={styles.logoText}>Hostel<span className={styles.logoAccent}>Hub</span></span>
+                <span className={styles.logoText}>Agiza<span className={styles.logoAccent}>hosteli</span></span>
               </div>
               <p className={styles.footerDescription}>
-                HostelHub connects budget travelers with amazing hostels worldwide. Book with confidence and save up to 70% ... <span className={styles.readMore}>Read More</span>
+                Agiza hosteli connects local and international students to amazing hostels around Makerere University. Book with confidence and save up to 70% ... <span className={styles.readMore}>Read More</span>
               </p>
               <div className={styles.footerContact}>
                 <div className={styles.footerContactItem}>
                   <Phone size={16} />
-                  <span>+1 555 123 4567</span>
+                  <span>+256 744755572</span>
                 </div>
                 <div className={styles.footerContactItem}>
                   <Clock size={16} />
@@ -283,7 +201,7 @@ export default function HostelBookingApp() {
                 </div>
                 <div className={styles.footerContactItem}>
                   <MapPin size={16} />
-                  <span>Global HQ: San Francisco, CA, USA</span>
+                  <span>Makerere Kikoni</span>
                 </div>
               </div>
             </div>
@@ -326,7 +244,7 @@ export default function HostelBookingApp() {
               <Users size={40} />
               <div>
                 <p className={styles.featureLabel}>Need help? 24/7 Support</p>
-                <p className={styles.featureValue}>+1 555 123 4567</p>
+                <p className={styles.featureValue}>+256 744755572</p>
               </div>
             </div>
 
@@ -348,7 +266,7 @@ export default function HostelBookingApp() {
           </div>
 
           <div className={styles.footerBottom}>
-            <p className={styles.copyright}>©2024 HostelHub.com. All rights Reserved.</p>
+            <p className={styles.copyright}>©2024 agizahosteli.com. All rights Reserved.</p>
             <div className={styles.socialLinks}>
               <span className={styles.followText}>Follow us</span>
               <a href="#" className={styles.socialLink}><Instagram size={20} /></a>
