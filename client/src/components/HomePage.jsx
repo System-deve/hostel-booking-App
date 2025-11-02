@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Star, Phone, MapPin, Clock, Search, X, Plus, Bed, Users, MessageCircle, Instagram, Facebook, Twitter, Youtube, Wifi, Coffee, MapPinned, Shield } from 'lucide-react';
+import Header from './header/header';
 import styles from './homePage.module.css';
 
 export default function HostelBookingApp() {
@@ -111,31 +112,8 @@ export default function HostelBookingApp() {
 
   return (
     <div className={styles.container}>
-      
-
-      {/* Header */}
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <div className={styles.logo}>
-            <Bed size={32} className={styles.logoIcon} />
-            <span className={styles.logoText}>Agiza<span className={styles.logoAccent}>hosteli</span></span>
-          </div>
-          <nav className={styles.nav}>
-            <a href="#" className={styles.navLink}>Home</a>
-            <a href="#" className={styles.navLink}>Find Hostels</a>
-            <a href="#" className={styles.navLink}>Destinations</a>
-            <a href="#" className={styles.navLink}>About</a>
-            <a href="#" className={styles.navLink}>Contact</a>
-          </nav>
-          <div className={styles.headerActions}>
-            <div className={styles.phoneNumber}>
-              <Phone size={16} className={styles.phoneIcon} />
-              <span>+256 709167919</span>
-            </div>
-            <button className={styles.ctaButton}>Sign Up</button>
-          </div>
-        </div>
-      </header>
+      <Header/>
+     
 
       {/* Hero Section */}
       <section className={styles.hero}>

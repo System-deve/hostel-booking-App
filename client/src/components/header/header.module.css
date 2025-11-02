@@ -1,0 +1,98 @@
+.header {
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.headerContent {
+  margin: 0 auto;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.logoIcon {
+  color: #5b21b6;
+}
+
+.logoText {
+  color: #111827;
+}
+
+.logoAccent {
+  color: #ef4444;
+}
+
+.nav {
+  display: none;
+  gap: 32px;
+  font-size: 15px;
+}
+
+@media (min-width: 768px) {
+  .nav {
+    display: flex;
+  }
+}
+
+.navLink {
+  color: #374151;
+  text-decoration: none;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+
+.navLink:hover {
+  color: #ef4444;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.phoneNumber {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (min-width: 768px) {
+  .phoneNumber {
+    display: flex;
+  }
+}
+
+.phoneIcon {
+  color: #ef4444;
+}
+
+.ctaButton {
+  background: #ef4444;
+  color: white;
+  padding: 12px 32px;
+  border-radius: 50px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 15px;
+}
+
+.ctaButton:hover {
+  background: #dc2626;
+}
