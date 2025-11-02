@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Star, Phone, MapPin, Clock, Search, X, Plus, Bed, Users, MessageCircle, Instagram, Facebook, Twitter, Youtube, Wifi, Coffee, MapPinned, Shield } from 'lucide-react';
+import {  ChevronRight, Star, Phone, MapPin, Clock, Search, X, Plus, Bed, Users, MessageCircle, Instagram, Facebook, Twitter, Youtube, Wifi, Coffee, MapPinned, Shield } from 'lucide-react';
 import Header from './header/header';
 import styles from './homePage.module.css';
 
@@ -130,40 +130,10 @@ export default function HostelBookingApp() {
               Connect to any hostel, save money, and experience authentic local culture. Book from thousands of verified hostels in Uganda.
             </p>
             
-            <div className={styles.heroButtons}>
-              <button 
-                onClick={() => setCurrentSlide((currentSlide - 1 + 3) % 3)}
-                className={styles.heroSlideButton}
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <button 
-                onClick={() => setCurrentSlide((currentSlide + 1) % 3)}
-                className={styles.heroSlideButton}
-              >
-                <ChevronRight size={20} />
-              </button>
-            </div>
-          </div>
-
-          <div className={styles.heroImages}>
-            {heroImages.map((img, i) => (
-              <img key={i} src={img} alt="" className={styles.heroImage} />
-            ))}
-          </div>
-        </div>
-
-        {/* Search Box */}
-        <div className={styles.searchBoxWrapper}>
+            
+             {/* Search Box */}
+         <div className={styles.searchBoxWrapper}>
           <div className={styles.searchBox}>
-            <div className={styles.searchBoxHeader}>
-              <button className={styles.searchActiveTab}>
-                Search Hostels
-              </button>
-              <div className={styles.searchHelp}>
-                💬 Need Help? 24/7 Support Available
-              </div>
-            </div>
             <div className={styles.searchFields}>
               <div className={styles.searchField}>
                 <label className={styles.searchLabel}>Destination</label>
@@ -171,14 +141,12 @@ export default function HostelBookingApp() {
                   <option>🌍 Where are you going?</option>
                 </select>
               </div>
-              <div className={styles.searchField}>
-                <label className={styles.searchLabel}>Check-in</label>
-                <input type="date" className={styles.searchInput} />
-              </div>
+              
               <div className={styles.searchField}>
                 <label className={styles.searchLabel}>Check-out</label>
                 <input type="date" className={styles.searchInput} />
               </div>
+              
               <div className={styles.searchField}>
                 <label className={styles.searchLabel}>Room Type</label>
                 <select className={styles.searchInput}>
@@ -192,6 +160,16 @@ export default function HostelBookingApp() {
             </button>
           </div>
         </div>
+          </div>
+
+          <div className={styles.heroImages}>
+            {heroImages.map((img, i) => (
+              <img key={i} src={img} alt="" className={styles.heroImage} />
+            ))}
+          </div>
+        </div>
+
+       
       </section>
 
       {/* Top Hostels */}
