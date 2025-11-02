@@ -1,12 +1,22 @@
 
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import HomePage from './components/HomePage'
 function App() {
+  
  
 
   return (
-    <>
-    <h1>hello testing rendering</h1>
-    </>
+    
+    <Router>
+      <div>
+        <Routes>
+        <Route path='/' element={<HomePage/>}/>
+      </Routes>
+      </div>
+      
+    </Router>
+   
+    
    
   )
 }
