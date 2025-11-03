@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Star, MapPin, Users, Bed, Heart } from 'lucide-react';
+import { Star, Heart } from 'lucide-react';
 import styles from './SearchResults.module.css';
 
 const SearchResults = () => {
@@ -30,7 +30,7 @@ const SearchResults = () => {
 
       setSearchedLocation(locationParam || '');
 
-      // Build the query string manually to ensure proper encoding
+      // Build the query string
       const params = new URLSearchParams();
       if (locationParam) params.append('location', locationParam);
       if (minPrice) params.append('minPrice', minPrice);
@@ -40,7 +40,7 @@ const SearchResults = () => {
       const queryString = params.toString();
       const url = `http://localhost:5001/api/rooms/available${queryString ? `?${queryString}` : ''}`;
       
-      console.log('Fetching from URL:', url); // Debug log
+      console.log('Fetching from URL:', url);
       
       const response = await fetch(url);
 
@@ -49,22 +49,21 @@ const SearchResults = () => {
       }
 
       const result = await response.json();
-      console.log('API Response:', result); // Debug log
+      console.log('API Response:', result);
 
       if (result.success) {
         setRooms(result.data || []);
         
         // Check if we have results and if they're fuzzy matches
         if (result.data && result.data.length > 0 && locationParam) {
-          // Check if any location exactly matches the search term
           const hasExactLocationMatch = result.data.some(room => {
             const roomLocation = room.hostelId?.location?.toLowerCase() || '';
             const searchTerm = locationParam.toLowerCase().trim();
-            // Exact match means the location equals the search term exactly
-            return roomLocation === searchTerm || roomLocation === `${searchTerm}, uganda`;
+            return roomLocation === searchTerm || 
+                   roomLocation === `${searchTerm}, uganda` ||
+                   roomLocation.split(',')[0].trim() === searchTerm;
           });
           
-          // If no exact match but we have results, show fuzzy match message
           setIsPartialMatch(!hasExactLocationMatch);
         }
       } else {
