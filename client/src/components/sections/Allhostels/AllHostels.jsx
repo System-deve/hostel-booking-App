@@ -1,21 +1,87 @@
 import React from 'react'
 import styles from './AllHostels.module.css';
 import {  ChevronRight } from 'lucide-react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const MostAffordableHostels = () => {
-     const hostelTypes = [
-    { title: "Party Hostels", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&h=300&fit=crop", count: 245 },
-    { title: "Boutique Hostels", image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&fit=crop", count: 189 },
-    { title: "Beach Hostels", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop", count: 312 },
-    { title: "Quiet & Relaxed", image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=400&h=300&fit=crop", count: 156 },
-    { title: "Adventure Hostels", image: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&h=300&fit=crop", count: 203 }
-  ];
 
+  const [hostel, setHostel]= useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError]= useState(null)
+
+  useEffect(()=>{
+    const fetchAllHostels= async()=>{
+      try{
+        setLoading(true);
+        setError(null);
+
+        const response= await fetch(`http://localhost:5001/api/hostels/allHostels`);
+        if(!response.ok){
+          console.error(error)
+          throw new Error('HTTP Error! status:', response.status)
+
+        }
+        const result = await response.json()
+        if(result.success && Array.isArray(result.data)){
+          setHostel(result.data);
+
+        }else{
+          setHostel([])
+        }
+
+      } catch(error){
+        console.log(error)
+
+      } finally{
+        setLoading(false)
+      }
+    }
+
+    fetchAllHostels()
+  }, []);
+
+  if(loading){
+    return(
+      <div className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <p>loading hostels...</p>
+        </div>
+
+      </div>
+    )
+
+  }
+
+  if(error){
+    return(
+      <div className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <p>{error}</p>
+        </div>
+
+      </div>
+    )
+
+  }
+
+  if(hostel.length===0){
+    return(
+      <div className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <p>No hostel found</p>
+        </div>
+
+      </div>
+    )
+
+  }
+  
   return (
     <div>
       <section className={styles.section}>
         <div className={styles.typesGrid}>
-          {hostelTypes.map((type, i) => (
+          {hostel.map((type, i) => (
             <div key={i} className={styles.typeCard}>
               <img src={type.image} alt={type.title} className={styles.typeImage} />
               <div className={styles.typeOverlay}></div>
@@ -23,7 +89,7 @@ const MostAffordableHostels = () => {
                  {type.count} Hostels
               </div>
               <div className={styles.typeInfo}>
-                <h3 className={styles.typeTitle}>{type.title}</h3>
+                {/* <h3 className={styles.typeTitle}>{type.title}</h3> */}
                 <p className={styles.typeDescription}>
                   Perfect for travelers seeking vibrant social atmosphere, events, and meeting new friends from around the world.
                 </p>
