@@ -72,3 +72,32 @@ export const fetchDifferentLocation = async (req, res) => {
         })
     }
 }
+
+export const getAllHostel = async (req, res) => {
+    try {
+        const hostels = await Hostel.find();
+        
+        if (hostels.length > 0) {
+            return res.status(200).json({
+                success: true,
+                message: "Hostel(s) found!",
+                data: hostels,
+                count: hostels.length
+            });
+        } else {
+            return res.status(404).json({
+                success: false,
+                message: "No hostels found",
+                data: []
+            });
+        }
+
+    } catch (error) {
+        console.log('Server Error:', error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+}

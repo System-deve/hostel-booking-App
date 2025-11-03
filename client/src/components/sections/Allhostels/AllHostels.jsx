@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './MostAffordableHostels.module.css';
+import styles from './AllHostels.module.css';
 import {  ChevronRight } from 'lucide-react';
 
 const MostAffordableHostels = () => {
@@ -20,7 +20,7 @@ const MostAffordableHostels = () => {
               <img src={type.image} alt={type.title} className={styles.typeImage} />
               <div className={styles.typeOverlay}></div>
               <div className={styles.typeCount}>
-                📍 {type.count} Hostels
+                 {type.count} Hostels
               </div>
               <div className={styles.typeInfo}>
                 <h3 className={styles.typeTitle}>{type.title}</h3>
