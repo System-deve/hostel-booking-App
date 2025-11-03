@@ -33,7 +33,10 @@ import mongoose, { Schema } from 'mongoose'
     rating: {
         type: Number,
     },
-    
+    isAvailable: {
+        type: Boolean,
+        default: true
+    }
 
 
 

@@ -29,7 +29,7 @@ const roomSchema = new mongoose.Schema({
     },
     roomType: {
         type: String,
-        enum: ['private', 'shared', 'dorm'],
+        enum: ['single', 'double', 'shared'],
         required: [true, 'Room type is required']
     },
     capacity: {
@@ -58,11 +58,7 @@ const roomSchema = new mongoose.Schema({
         required: [true, 'Room description is required'],
         maxLength: 500
     },
-    availableBeds: {
-        type: Number,
-        required: true,
-        min: 0
-    },
+   
     amenities: {
         type: [String],
         default: []

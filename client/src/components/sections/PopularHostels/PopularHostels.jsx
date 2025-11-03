@@ -3,12 +3,14 @@ import styles from './PopularHostels.module.css'
 import {  ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 const PopularHostels = () => {
   const [ hostel, setHostel]= useState([])
   const [Loading, setLoading]=useState(true)
   const [error, setError]= useState(null)
+  const navigate = useNavigate()
 
   useEffect(()=>{
 
@@ -82,7 +84,12 @@ const PopularHostels = () => {
 
         <div className={styles.citiesGrid}>
           {hostel.map((location, i) => (
-            <div key={i} className={styles.cityCard}>
+            <div
+             key={i}
+              className={styles.cityCard}
+              onClick={()=> navigate(`/hostel/${location._id}/rooms`)}
+            style={{cursor: 'pointer'}}
+            >
               <img src={location.image} alt={location.name} className={styles.cityImage} />
               <div className={styles.cityOverlay}></div>
               <div className={styles.cityInfo}>
