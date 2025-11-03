@@ -79,9 +79,7 @@ export const getAllAvailableRooms = async (req, res) => {
       location 
     } = req.query;
 
-    console.log('\n========================================');
-    console.log('SEARCH REQUEST RECEIVED');
-    console.log('========================================');
+    
     console.log('Query params:', { roomType, minPrice, maxPrice, location });
 
     // Base filter - only available rooms
@@ -121,9 +119,7 @@ export const getAllAvailableRooms = async (req, res) => {
 
     // Show all locations in database for debugging
     if (rooms.length > 0) {
-      console.log('\n========================================');
-      console.log('ALL AVAILABLE LOCATIONS IN DATABASE');
-      console.log('========================================');
+      
       const locations = rooms
         .map(r => r.hostelId?.location)
         .filter(Boolean);
@@ -140,9 +136,7 @@ export const getAllAvailableRooms = async (req, res) => {
     let filteredRooms = rooms;
     if (location && location.trim()) {
       const searchTerm = location.trim().toLowerCase();
-      console.log('\n========================================');
-      console.log(`FILTERING BY LOCATION: "${searchTerm}"`);
-      console.log('========================================');
+      
       
       filteredRooms = rooms.filter(room => {
         // Skip if no hostel or location data
@@ -181,10 +175,6 @@ export const getAllAvailableRooms = async (req, res) => {
       console.log(`\n✓ AFTER location filter: ${filteredRooms.length} rooms\n`);
     }
 
-    console.log('========================================');
-    console.log(`RETURNING ${filteredRooms.length} ROOMS`);
-    console.log('========================================\n');
-
     res.status(200).json({
       success: true,
       data: filteredRooms,
@@ -198,11 +188,9 @@ export const getAllAvailableRooms = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('\n========================================');
-    console.error('ERROR IN getAllAvailableRooms');
-    console.error('========================================');
+   
     console.error(error);
-    console.error('========================================\n');
+    console.error('this has been the most challenge controller for me to do 😱🙏🙏 thank God it finally worked');
     
     res.status(500).json({
       success: false,
