@@ -1,46 +1,101 @@
 import React from 'react'
 import styles from './TopRatedHostels.module.css'
-import {  ChevronRight, Star, Phone, MapPin, Clock, Search, X, Plus, Bed, Users, MessageCircle, Instagram, Facebook, Twitter, Youtube, Wifi, Coffee, MapPinned, Shield } from 'lucide-react';
+import {  Star, MapPin,  } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const TopRatedHostels = () => {
-     const hostels = [
-    {
-      image: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&h=300&fit=crop",
-      rating: 4.8,
-      reviews: 892,
-      name: "Downtown Backpackers Hostel",
-      location: "Berlin, Germany",
-      amenities: ["Free WiFi", "Kitchen", "Lockers"],
-      price: 18.50
-    },
-    {
-      image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&fit=crop",
-      rating: 4.9,
-      reviews: 1023,
-      name: "Surf & Stay Beach Hostel",
-      location: "Barcelona, Spain",
-      amenities: ["Beach Access", "Bar", "Pool"],
-      price: 22.00
-    },
-    {
-      image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop",
-      rating: 4.7,
-      reviews: 745,
-      name: "Old Town Social Hostel",
-      location: "Prague, Czech Republic",
-      amenities: ["Free Breakfast", "Tours", "WiFi"],
-      price: 15.90
-    },
-    {
-      image: "https://images.pexels.com/photos/32340767/pexels-photo-32340767.jpeg",
-      rating: 4.9,
-      reviews: 956,
-      name: "Mountain View Hostel",
-      location: "Interlaken, Switzerland",
-      amenities: ["Mountain Views", "Kitchen", "Lockers"],
-      price: 28.00
+  const[hostel, setHostel]=useState([])
+  const[loading, setLoading]=useState(true);
+  const[error, setError]=useState(null)
+
+  useEffect(()=>{
+    const fetchTopRatedHostel =async()=>{
+      try{
+        setLoading(true);
+        setError(null)
+        const response =await fetch(`http://localhost:5001/api/hostels/topRated`);
+        if(!response.ok){
+          console.log('Error Fetching')
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+         const result= await response.json()
+         console.log(result)
+        
+         if(result.success && Array.isArray(result.data)){
+            setHostel(result.data)
+         } else{
+          setHostel([])
+         }
+
+
+      } catch(error){
+        console.log("error fetching top rated Data", error);
+        setError('Failed to load hostels please try again later')
+
+      } finally{
+        setLoading(false)
+      }
     }
-  ];
+  fetchTopRatedHostel()
+
+
+}, [])
+
+if(loading){
+  return(
+    <div className={styles.section}>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>Top Rated Hostels</h2>
+        <p>Loading hostels...</p>
+      </div>
+
+    </div>
+  )
+
+}
+
+if(error){
+  return(
+    <div className={styles.section}>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>Top Rated Hostels</h2>
+        <p>{error}</p>
+      </div>
+
+    </div>
+  )
+
+}
+
+if(hostel.length === 0){
+  return(
+    <div className={styles.section}>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.sectionTitle}>Top Rated Hostels</h2>
+        <p>No hostels found.</p>
+      </div>
+
+    </div>
+  )
+
+
+}
+  
+const checkAmenities= (hostelAmenities)=>{
+  if(!hostelAmenities || !Array.isArray(hostelAmenities)){
+    return []
+
+
+}
+if(hostelAmenities.length > 5){
+  return hostelAmenities.slice(0,5)
+
+}
+return hostelAmenities
+}
+
+
+
   return (
     <div>
       {/* Top Hostels */}
@@ -54,19 +109,24 @@ const TopRatedHostels = () => {
         </div>
 
         <div className={styles.hostelGrid}>
-          {hostels.map((hostel, i) => (
+          {hostel.map((hostel, i) => (
             <div key={i} className={styles.hostelCard}>
               <div className={styles.hostelImageWrapper}>
-                <img src={hostel.image} alt={hostel.name} className={styles.hostelImage} />
-                {/* <div className={styles.hostelBadge}>
-                  ⭐ Top Rated
-                </div> */}
+                <img 
+                src={hostel.image} 
+                alt={hostel.name}
+                className={styles.hostelImage} 
+                onError={(e)=>{
+                   e.target.src = 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop'
+                }}
+                />
+                
+                
               </div>
               <div className={styles.hostelInfo}>
                 <div className={styles.hostelRating}>
                   <Star size={16} fill="currentColor" className={styles.starIcon} />
                   <span className={styles.ratingScore}>{hostel.rating}</span>
-                  <span className={styles.ratingReviews}>({hostel.reviews} reviews)</span>
                 </div>
                 <h3 className={styles.hostelName}>{hostel.name}</h3>
                 <div className={styles.hostelLocation}>
@@ -74,15 +134,15 @@ const TopRatedHostels = () => {
                   <span>{hostel.location}</span>
                 </div>
                 <div className={styles.hostelAmenities}>
-                  {hostel.amenities.map((amenity, idx) => (
+                  {hostel.amenities && checkAmenities(hostel.amenities).map((amenity, idx) => (
                     <span key={idx} className={styles.amenity}>{amenity}</span>
                   ))}
+                  {hostel.amenities && hostel.amenities.length > 5 &&(
+                    <span className={styles.moreText}>+{hostel.amenities.length -5}more</span>
+                  )}
                 </div>
                 <div className={styles.hostelFooter}>
-                  <div className={styles.hostelPrice}>
-                    <span className={styles.priceAmount}>${hostel.price}</span>
-                    <span className={styles.priceLabel}> /night</span>
-                  </div>
+                 
                   <button className={styles.bookButton}>Book Now</button>
                 </div>
               </div>

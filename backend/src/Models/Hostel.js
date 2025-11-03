@@ -20,7 +20,7 @@ import mongoose, { Schema } from 'mongoose'
 
     },
 
-    Amenities:{
+    amenities:{
         type: [String],
            
 
@@ -30,6 +30,10 @@ import mongoose, { Schema } from 'mongoose'
         required: [true, "hostel must have an image"]
 
     },
+    rating: {
+        type: Number,
+    },
+    
 
 
 
