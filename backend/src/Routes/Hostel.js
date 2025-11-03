@@ -1,7 +1,8 @@
 import express from 'express'
-import { getTopRatedHostels } from '../Controller/Hostel.js'
+import { getTopRatedHostels, fetchDifferentLocation } from '../Controller/Hostel.js'
 
 const router = express.Router();
 router.get('/topRated', getTopRatedHostels )
+router.get('/locationBasedHostels', fetchDifferentLocation )
 
 export default router;
