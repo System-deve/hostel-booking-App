@@ -10,8 +10,9 @@ const app = express()
 app.use(cors())
 app.use(express.json());
 
-app.use('/api/hostels', Hostel)
 app.use('/api/rooms', Room);
+
+app.use('/api/hostels', Hostel)
 
 app.listen(PORT, async()=>{
     console.log(`server connected at: http://localhost:${PORT}`);

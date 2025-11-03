@@ -24,33 +24,38 @@ const Hero = () => {
     }));
   };
 
- const handleSearch = () => {
+  const handleSearch = () => {
     // Build query parameters - only include fields that have values
     const queryParams = new URLSearchParams();
     
     // Handle price range
     if (searchCriteria.priceRange) {
-        const [min, max] = searchCriteria.priceRange.split('-');
-        if (min) queryParams.append('minPrice', min);
-        if (max) queryParams.append('maxPrice', max);
+      const [min, max] = searchCriteria.priceRange.split('-');
+      if (min) queryParams.append('minPrice', min);
+      if (max && max !== '') queryParams.append('maxPrice', max);
     }
     
     // Handle location - trim whitespace and encode
     if (searchCriteria.location.trim()) {
-        queryParams.append('location', searchCriteria.location.trim());
-        console.log('Searching for location:', searchCriteria.location.trim()); // Debug
+      queryParams.append('location', searchCriteria.location.trim());
+      console.log('Searching for location:', searchCriteria.location.trim());
     }
     
     // Handle room type
     if (searchCriteria.roomType) {
-        queryParams.append('roomType', searchCriteria.roomType);
+      queryParams.append('roomType', searchCriteria.roomType);
     }
 
     const queryString = queryParams.toString();
+    console.log('Query string:', queryString);
     
-    // Navigate to search results page
-    navigate(`/rooms${queryString ? `?${queryString}` : ''}`);
-};
+    // Navigate to search results page with proper query string
+    if (queryString) {
+      navigate(`/rooms?${queryString}`);
+    } else {
+      navigate('/rooms');
+    }
+  };
 
   // Handle Enter key press in location input
   const handleKeyPress = (e) => {
