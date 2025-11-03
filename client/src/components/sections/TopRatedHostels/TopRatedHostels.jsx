@@ -2,11 +2,13 @@ import React from 'react'
 import styles from './TopRatedHostels.module.css'
 import {  Star, MapPin,  } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const TopRatedHostels = () => {
   const[hostel, setHostel]=useState([])
   const[loading, setLoading]=useState(true);
   const[error, setError]=useState(null)
+  const navigate =useNavigate();
 
   useEffect(()=>{
     const fetchTopRatedHostel =async()=>{
@@ -110,7 +112,12 @@ return hostelAmenities
 
         <div className={styles.hostelGrid}>
           {hostel.map((hostel, i) => (
-            <div key={i} className={styles.hostelCard}>
+            <div 
+            key={i} 
+            className={styles.hostelCard}
+            onClick={()=> navigate(`/hostel/${hostel._id}/rooms`)}
+            style={{cursor: 'pointer'}}
+            >
               <div className={styles.hostelImageWrapper}>
                 <img 
                 src={hostel.image} 
