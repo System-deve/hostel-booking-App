@@ -215,8 +215,8 @@ const SearchResults = () => {
 
                   <div className={styles.priceContainer}>
                     <div className={styles.price}>
-                      <span className={styles.priceAmount}>${room.roomPrice}</span>
-                      <span className={styles.priceUnit}> night</span>
+                      <span className={styles.priceAmount}>Ugx.{room.roomPrice}</span>
+                      <span className={styles.priceUnit}> semester</span>
                     </div>
                   </div>
                 </div>

@@ -92,10 +92,10 @@ const Hero = () => {
                       onChange={(e) => handleSearchChange('priceRange', e.target.value)}
                     >
                       <option value="">Any Price</option>
-                      <option value="0-50">Under $50</option>
-                      <option value="50-100">$50 - $100</option>
-                      <option value="100-200">$100 - $200</option>
-                      <option value="200-">Above $200</option>
+                      <option value="0-500000">Under shs 500,000</option>
+                      <option value="500001-1000000">shs 500,000 - shs 1000,000</option>
+                      <option value="1000000-2000000">shs 1000,000 - shs 2000,000</option>
+                      <option value="2000001-">Above shs 2000,000</option>
                     </select>
                   </div>
                   
@@ -118,10 +118,11 @@ const Hero = () => {
                       value={searchCriteria.roomType}
                       onChange={(e) => handleSearchChange('roomType', e.target.value)}
                     >
+
                       <option value="">Any Room Type</option>
-                      <option value="private">Private Room</option>
-                      <option value="shared">Shared Room</option>
-                      <option value="dorm">Dormitory</option>
+                      <option value="shared">shared room</option>
+                      <option value="single">single 1 person room</option>
+                      <option value="double">Double 1 person room</option>
                     </select>
                   </div>
                 </div>

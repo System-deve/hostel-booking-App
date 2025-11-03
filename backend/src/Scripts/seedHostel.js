@@ -128,7 +128,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 25,
+    roomPrice: 350000,
     roomDescription: "Spacious shared dorm with 6 comfortable beds, perfect for budget travelers.",
     amenities: ["Free WiFi", "Lockers", "Bed Linens", "Reading Light"]
   },
@@ -144,7 +144,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 30,
+    roomPrice: 450000,
     roomDescription: "Female-only shared room with 4 beds and extra security features.",
     amenities: ["Free WiFi", "Lockers", "Bed Linens", "Reading Light", "Female Only"]
   },
@@ -160,7 +160,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 80,
+    roomPrice: 1200000,
     roomDescription: "Private double room with comfortable queen-sized bed.",
     amenities: ["Free WiFi", "Private Bathroom", "TV", "Air Conditioning"]
   },
@@ -176,7 +176,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 50,
+    roomPrice: 750000,
     roomDescription: "Private single room with study desk and wardrobe.",
     amenities: ["Free WiFi", "Private Bathroom", "Desk", "Wardrobe"]
   },
@@ -192,14 +192,14 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 22,
+    roomPrice: 280000,
     roomDescription: "Large male-only dormitory with 8 comfortable beds.",
     amenities: ["Free WiFi", "Lockers", "Bed Linens", "Power Outlets"]
   },
   {
     roomNumber: "SW301",
     roomGender: "mixed",
-    roomType: "double", // Changed from "suite" to "double"
+    roomType: "double",
     capacity: 3,
     availableBeds: 1,
     roomImages: [
@@ -208,7 +208,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 120,
+    roomPrice: 2100000,
     roomDescription: "Premium double room with private bathroom, sitting area and balcony.",
     amenities: ["Free WiFi", "Private Bathroom", "Sitting Area", "Balcony", "Air Conditioning"]
   },
@@ -226,7 +226,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 20,
+    roomPrice: 300000,
     roomDescription: "Standard university shared room with study desks.",
     amenities: ["Free WiFi", "Study Desk", "Lockers", "Bed Linens"]
   },
@@ -242,7 +242,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 25,
+    roomPrice: 400000,
     roomDescription: "Female-only shared room with enhanced security.",
     amenities: ["Free WiFi", "Study Desk", "Lockers", "Female Only"]
   },
@@ -258,7 +258,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 45,
+    roomPrice: 650000,
     roomDescription: "Private single room for focused studying.",
     amenities: ["Free WiFi", "Study Desk", "Private Bathroom", "Wardrobe"]
   },
@@ -274,7 +274,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 18,
+    roomPrice: 250000,
     roomDescription: "Male-only dormitory with shared study area.",
     amenities: ["Free WiFi", "Study Area", "Lockers", "Bed Linens"]
   },
@@ -290,7 +290,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 70,
+    roomPrice: 1100000,
     roomDescription: "Private double room for couples or friends.",
     amenities: ["Free WiFi", "Private Bathroom", "Study Desk", "Wardrobe"]
   },
@@ -308,7 +308,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 15,
+    roomPrice: 200000,
     roomDescription: "Budget-friendly shared dormitory for students.",
     amenities: ["Free WiFi", "Lockers", "Bed Linens", "Common Kitchen"]
   },
@@ -324,7 +324,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 18,
+    roomPrice: 320000,
     roomDescription: "Female-only shared room with security features.",
     amenities: ["Free WiFi", "Lockers", "Female Only", "Common Kitchen"]
   },
@@ -340,7 +340,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 35,
+    roomPrice: 550000,
     roomDescription: "Affordable private single room.",
     amenities: ["Free WiFi", "Study Desk", "Lockers", "Bed Linens"]
   },
@@ -356,7 +356,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 16,
+    roomPrice: 270000,
     roomDescription: "Small male-only shared room.",
     amenities: ["Free WiFi", "Lockers", "Bed Linens", "Study Area"]
   },
@@ -374,7 +374,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 28,
+    roomPrice: 420000,
     roomDescription: "Comfortable shared dorm with modern amenities.",
     amenities: ["Free WiFi", "Lockers", "Bed Linens", "Reading Light"]
   },
@@ -390,7 +390,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 32,
+    roomPrice: 480000,
     roomDescription: "Female-only room with enhanced privacy.",
     amenities: ["Free WiFi", "Lockers", "Female Only", "Reading Light"]
   },
@@ -406,7 +406,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 85,
+    roomPrice: 1300000,
     roomDescription: "Private double room with ensuite bathroom.",
     amenities: ["Free WiFi", "Private Bathroom", "TV", "Air Conditioning"]
   },
@@ -422,14 +422,14 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 55,
+    roomPrice: 850000,
     roomDescription: "Private single room with modern furnishings.",
     amenities: ["Free WiFi", "Private Bathroom", "Desk", "Wardrobe"]
   },
   {
     roomNumber: "NH301",
     roomGender: "mixed",
-    roomType: "double", // Changed from "suite" to "double"
+    roomType: "double",
     capacity: 3,
     availableBeds: 1,
     roomImages: [
@@ -438,7 +438,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 130,
+    roomPrice: 2300000,
     roomDescription: "Premium double room with separate living area.",
     amenities: ["Free WiFi", "Private Bathroom", "Living Area", "Mini Fridge", "Air Conditioning"]
   },
@@ -456,7 +456,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 12,
+    roomPrice: 180000,
     roomDescription: "Budget shared dormitory for students.",
     amenities: ["Free WiFi", "Lockers", "Bed Linens", "Common Kitchen"]
   },
@@ -472,7 +472,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 14,
+    roomPrice: 220000,
     roomDescription: "Male-only shared accommodation.",
     amenities: ["Free WiFi", "Lockers", "Bed Linens", "Study Area"]
   },
@@ -488,7 +488,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 30,
+    roomPrice: 500000,
     roomDescription: "Basic private single room.",
     amenities: ["Free WiFi", "Study Desk", "Lockers", "Bed Linens"]
   },
@@ -504,7 +504,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 16,
+    roomPrice: 280000,
     roomDescription: "Female-only shared room.",
     amenities: ["Free WiFi", "Lockers", "Female Only", "Bed Linens"]
   },
@@ -522,7 +522,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 28,
+    roomPrice: 430000,
     roomDescription: "Comfortable female-only shared room.",
     amenities: ["Free WiFi", "Lockers", "Female Only", "Reading Light", "Security"]
   },
@@ -538,7 +538,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 25,
+    roomPrice: 380000,
     roomDescription: "Spacious female-only dormitory.",
     amenities: ["Free WiFi", "Lockers", "Female Only", "Study Area"]
   },
@@ -554,7 +554,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 45,
+    roomPrice: 700000,
     roomDescription: "Private single room for female students.",
     amenities: ["Free WiFi", "Private Bathroom", "Study Desk", "Security"]
   },
@@ -570,7 +570,7 @@ const sampleRooms = [
         isPrimary: true
       }
     ],
-    roomPrice: 75,
+    roomPrice: 1150000,
     roomDescription: "Private double room for female residents.",
     amenities: ["Free WiFi", "Private Bathroom", "TV", "Security"]
   }
@@ -579,16 +579,22 @@ const sampleRooms = [
 // Function to generate additional rooms for remaining hostels
 const generateAdditionalRooms = (hostelCount) => {
   const additionalRooms = [];
-  const roomTypes = ['shared', 'single', 'double']; // Only valid types
+  const roomTypes = ['shared', 'single', 'double'];
   const genders = ['mixed', 'male', 'female'];
   
-  // Room templates for different price ranges
+  // Room templates with UGX prices distributed across all categories
   const roomTemplates = [
-    { type: 'shared', capacity: 4, price: 15, description: "Basic shared accommodation" },
-    { type: 'shared', capacity: 6, price: 12, description: "Budget dormitory style" },
-    { type: 'shared', capacity: 8, price: 10, description: "Large shared dormitory" },
-    { type: 'single', capacity: 1, price: 35, description: "Private single room" },
-    { type: 'double', capacity: 2, price: 60, description: "Private double room" }
+    { type: 'shared', capacity: 4, price: 180000, description: "Basic shared accommodation" },
+    { type: 'shared', capacity: 6, price: 250000, description: "Budget dormitory style" },
+    { type: 'shared', capacity: 8, price: 320000, description: "Large shared dormitory" },
+    { type: 'shared', capacity: 4, price: 450000, description: "Comfortable shared room" },
+    { type: 'single', capacity: 1, price: 550000, description: "Private single room" },
+    { type: 'single', capacity: 1, price: 750000, description: "Standard private room" },
+    { type: 'single', capacity: 1, price: 950000, description: "Superior single room" },
+    { type: 'double', capacity: 2, price: 1100000, description: "Private double room" },
+    { type: 'double', capacity: 2, price: 1500000, description: "Deluxe double room" },
+    { type: 'double', capacity: 3, price: 1850000, description: "Premium double room" },
+    { type: 'double', capacity: 2, price: 2200000, description: "Luxury double room" }
   ];
 
   const images = [
@@ -620,7 +626,7 @@ const generateAdditionalRooms = (hostelCount) => {
             isPrimary: true
           }
         ],
-        roomPrice: template.price + Math.floor(Math.random() * 20),
+        roomPrice: template.price + Math.floor(Math.random() * 100000),
         roomDescription: template.description,
         amenities: ["Free WiFi", "Lockers", "Bed Linens"],
         hostelIndex: i
@@ -684,6 +690,19 @@ const seedHostels = async () => {
     console.log('\nHostel Locations:');
     insertedHostels.forEach(hostel => {
       console.log(`- ${hostel.name}: ${hostel.location}`);
+    });
+
+    // Log price distribution
+    console.log('\nPrice Distribution (UGX):');
+    const priceRanges = {
+      'Under 500,000': roomsToInsert.filter(r => r.roomPrice < 500000).length,
+      '500,000 - 1,000,000': roomsToInsert.filter(r => r.roomPrice >= 500000 && r.roomPrice <= 1000000).length,
+      '1,000,000 - 2,000,000': roomsToInsert.filter(r => r.roomPrice > 1000000 && r.roomPrice <= 2000000).length,
+      'Above 2,000,000': roomsToInsert.filter(r => r.roomPrice > 2000000).length
+    };
+    
+    Object.entries(priceRanges).forEach(([range, count]) => {
+      console.log(`- ${range}: ${count} rooms`);
     });
 
   } catch (error) {
