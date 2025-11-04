@@ -93,7 +93,13 @@ const HostelRooms = () => {
     <div className={styles.container}>
       {/* Header */}
       <div className={styles.header}>
-        <button onClick={() => navigate(-1)} className={styles.backBtn}>
+        <button onClick={() => {
+          navigate(-1);
+          // Small timeout to ensure navigation happens first, then scroll
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
+        }} className={styles.backBtn}>
           <ArrowLeft size={18} />
         </button>
         
@@ -138,7 +144,10 @@ const HostelRooms = () => {
               <div 
                 key={room._id} 
                 className={styles.card}
-                onClick={() => navigate(`/room/${room._id}`)}
+                onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              navigate(`/room/${room._id}`);
+            }}
               >
                 <div className={styles.imageContainer}>
                   <img
