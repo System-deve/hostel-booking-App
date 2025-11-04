@@ -22,15 +22,23 @@ import { SignupForm } from './components/signIn.jsx'
         export default App;*/}
 
 // src/App.js
+// src/App.js
+// src/App.jsx
 import React from 'react';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import Dashboard from './components/dashboard/Dashboard';
-import './styles/dashboard.css';
+import { AuthProvider } from './Contexts/AuthContext';
+
 
 function App() {
   return (
-    <div className="App">
-      <Dashboard />
-    </div>
+    <AuthProvider>
+      <div className="App">
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      </div>
+    </AuthProvider>
   );
 }
 
