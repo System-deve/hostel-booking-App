@@ -78,7 +78,10 @@ const MostAffordableHostels = () => {
             <div
               key={i} 
               className={styles.typeCard}
-              onClick={() => navigate(`/hostel/${hostel._id}/rooms`)} // Fixed: using hostel._id
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                navigate(`/hostel/${hostel._id}/rooms`);
+              }}
             >
               <img 
                 src={hostel.image} 

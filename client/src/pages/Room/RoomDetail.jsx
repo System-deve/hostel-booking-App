@@ -74,6 +74,32 @@ const RoomDetails = () => {
     return iconMap[key] || <Check size={20} />;
   };
 
+  // Function to get images for the grid layout
+  const getGridImages = () => {
+    const images = room?.roomImages || [];
+    const primaryImage = images.find(img => img.isPrimary)?.url || images[0]?.url;
+    
+    if (images.length === 0) {
+      return {
+        mainImage: 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&h=600&fit=crop',
+        sideImages: []
+      };
+    }
+
+    if (images.length === 1) {
+      return {
+        mainImage: primaryImage,
+        sideImages: []
+      };
+    }
+
+    // For 2-5 images, show main + side images
+    return {
+      mainImage: primaryImage,
+      sideImages: images.slice(1, 5) // Get up to 4 side images
+    };
+  };
+
   if (loading) {
     return (
       <div className={styles.container}>
@@ -98,10 +124,9 @@ const RoomDetails = () => {
     );
   }
 
-  const images = room.roomImages || [];
-  const primaryImage = images.find(img => img.isPrimary)?.url || 
-                       images[0]?.url || 
-                       'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&h=600&fit=crop';
+  const { mainImage, sideImages } = getGridImages();
+  const allImages = room.roomImages || [];
+  const hasMultipleImages = allImages.length > 1;
 
   return (
     <div className={styles.container}>
@@ -126,10 +151,10 @@ const RoomDetails = () => {
         </div>
 
         {/* Images Grid */}
-        <div className={styles.imagesGrid}>
-          <div className={styles.mainImageWrapper}>
+        <div className={`${styles.imagesGrid} ${!hasMultipleImages ? styles.singleImage : ''}`}>
+          <div className={`${styles.mainImageWrapper} ${!hasMultipleImages ? styles.fullWidth : ''}`}>
             <img
-              src={primaryImage}
+              src={mainImage}
               alt="Main room"
               className={styles.mainImage}
               onClick={() => setShowAllPhotos(true)}
@@ -138,28 +163,33 @@ const RoomDetails = () => {
               }}
             />
           </div>
-          <div className={styles.sideImages}>
-            {images.slice(1, 5).map((img, idx) => (
-              <div key={idx} className={styles.sideImageWrapper}>
-                <img
-                  src={img.url}
-                  alt={`Room ${idx + 2}`}
-                  className={styles.sideImage}
-                  onClick={() => setShowAllPhotos(true)}
-                  onError={(e) => {
-                    e.target.src = 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&h=300&fit=crop';
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-          {images.length > 5 && (
+          
+          {hasMultipleImages && sideImages.length > 0 && (
+            <div className={styles.sideImages}>
+              {sideImages.map((img, idx) => (
+                <div key={idx} className={styles.sideImageWrapper}>
+                  <img
+                    src={img.url}
+                    alt={`Room ${idx + 2}`}
+                    className={styles.sideImage}
+                    onClick={() => setShowAllPhotos(true)}
+                    onError={(e) => {
+                      e.target.src = 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400&h=300&fit=crop';
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {allImages.length > 5 && (
             <button className={styles.showAllPhotosBtn} onClick={() => setShowAllPhotos(true)}>
               Show all photos
             </button>
           )}
         </div>
 
+        {/* Rest of your component remains the same */}
         {/* Main Content Grid */}
         <div className={styles.mainGrid}>
           {/* Left Column */}
@@ -281,7 +311,7 @@ const RoomDetails = () => {
             </button>
           </div>
           <div className={styles.modalContent}>
-            {images.map((img, idx) => (
+            {allImages.map((img, idx) => (
               <div key={idx} className={styles.modalImageWrapper}>
                 <img
                   src={img.url}

@@ -87,8 +87,11 @@ const PopularHostels = () => {
             <div
              key={i}
               className={styles.cityCard}
-              onClick={()=> navigate(`/hostel/${location._id}/rooms`)}
-            style={{cursor: 'pointer'}}
+                onClick={() => { 
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                navigate(`/hostel/${location._id}/rooms`);
+              }}
+              style={{ cursor: 'pointer' }}
             >
               <img src={location.image} alt={location.name} className={styles.cityImage} />
               <div className={styles.cityOverlay}></div>

@@ -1,18 +1,23 @@
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import HomePage from './pages/HomePage/HomePage'
 import HostelRooms from './pages/Room/HostelRoom'
 import RoomDetails from './pages/Room/RoomDetail'
 import SearchResults from './pages/SearchResults/SearchResult'
+import Header from './components/header/header'
+import Footer from './components/Footer/footer'
 
 
 function App() {
-  
+  const location = useLocation()
+    const pageNoHeader = location.pathname.includes("/login")
+
 
   return (
     
-    <Router>
       <div>
+        {!pageNoHeader && <Header/>}
+
         <Routes>
         <Route path='/' element={<HomePage/>}/>
         <Route path="/rooms" element={<SearchResults />} />
@@ -22,9 +27,9 @@ function App() {
 
 
       </Routes>
+      {!pageNoHeader && <Footer/>}
       </div>
       
-    </Router>
    
     
    

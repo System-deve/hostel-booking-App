@@ -20,7 +20,7 @@ const header = () => {
           <div className={styles.headerActions}>
             <div className={styles.phoneNumber}>
               <Phone size={16} className={styles.phoneIcon} />
-              <span>+256 744755572</span>
+              <span><a href="tel:+256744755572">+256 744755572</a></span>
             </div>
             <button className={styles.ctaButton}>Sign Up</button>
           </div>

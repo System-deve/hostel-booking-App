@@ -115,8 +115,13 @@ return hostelAmenities
             <div 
             key={i} 
             className={styles.hostelCard}
-            onClick={()=> navigate(`/hostel/${hostel._id}/rooms`)}
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              navigate(`/hostel/${hostel._id}/rooms`);
+            }}
+            
             style={{cursor: 'pointer'}}
+            
             >
               <div className={styles.hostelImageWrapper}>
                 <img 
