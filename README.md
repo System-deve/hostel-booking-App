@@ -137,7 +137,7 @@ Please read our `CONTRIBUTING.md` (to be created) for detailed guidelines.
 ## Team
 
 - **SSEWANTE LIVINGSTONE** - *Project Lead & Developer* - (https://github.com/ssewanteLivingstone)
-- **[Team Member 2]** - *Role* - [GitHub Profile Link]
+- **DDAMULIRA CHARLES** - *MEMBER* - https://github.com/ddamuliracharles
 - **[Team Member 3]** - *Role* - [GitHub Profile Link]
 
 ## License
