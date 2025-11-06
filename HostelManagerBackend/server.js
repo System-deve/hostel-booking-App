@@ -5,7 +5,7 @@ import Hostel from './src/Routes/Hostel.js'
 import Room from './src/Routes/Room.js'
 
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5001;
 const app = express()
 app.use(cors())
 app.use(express.json());
