@@ -680,3 +680,16 @@ button:focus {
   outline: 2px solid #222;
   outline-offset: 2px;
 }
+/* Add these styles to your existing RoomDetail.module.css file */
+
+.loginNote {
+    text-align: center;
+    color: #667eea;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+    font-weight: 500;
+    padding: 0.75rem;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+}
