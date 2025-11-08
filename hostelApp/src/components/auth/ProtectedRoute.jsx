@@ -1,9 +1,9 @@
-// src/components/auth/ProtectedRoute.jsx
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth'; 
-import { AuthPage } from './AuthPage';
 
 export function ProtectedRoute({ children }) {
   const { currentUser } = useAuth();
 
-  return currentUser ? children : <AuthPage />;
+  // if not logged in, redirect to login/signup page
+  return currentUser ? children : <Navigate to="/auth" replace />;
 }

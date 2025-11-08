@@ -1,44 +1,22 @@
-{/*import React, { useState } from 'react'
-import { LoginForm } from './components/login.jsx'
-import { SignupForm } from './components/signIn.jsx'
- function App() {
-            const [currentForm, setCurrentForm] = useState('login');
-            
-            const toggleForm = (formName) => {
-                setCurrentForm(formName);
-            };
-            
-            return (
-                <>
-                    {currentForm === 'login' ? (
-                        <LoginForm toggleForm={toggleForm} />
-                    ) : (
-                        <SignupForm toggleForm={toggleForm} />
-                    )}
-                </>
-            );
-        }
-
-        export default App;*/}
-
-// src/App.js
-// src/App.js
-// src/App.jsx
-import React from 'react';
-import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthPage } from './components/auth/AuthPage';
 import Dashboard from './components/dashboard/Dashboard';
-import { AuthProvider } from './Contexts/AuthContext';
-
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 function App() {
   return (
-    <AuthProvider>
-      <div className="App">
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-      </div>
-    </AuthProvider>
+    <Routes>
+      <Route path="/" element={<Navigate to="/auth" />} />
+      <Route path="/auth" element={<AuthPage />} />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
 

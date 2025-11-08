@@ -17,7 +17,6 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/rooms', require('./routes/rooms')); // Add this line
 
 // Basic route
 app.get('/', (req, res) => {
@@ -55,9 +54,6 @@ app.listen(PORT, () => {
   console.log('📡 Available routes:');
   console.log('   GET  /              - API status');
   console.log('   GET  /api/health    - Health check');
-  console.log('   POST /api/auth/register - Register manager');
-  console.log('   POST /api/auth/login    - Login manager');
-  console.log('   GET  /api/auth/me       - Get current manager');
-  console.log('   GET  /api/rooms         - Get manager rooms');
-  console.log('   POST /api/rooms         - Create room');
+  console.log('   POST /api/auth/register - Register user');
+  console.log('   GET  /api/auth/users    - List users');
 });

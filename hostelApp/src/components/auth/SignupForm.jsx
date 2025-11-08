@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth'; // This import
 import googleLogo from '../../assets/stone.jpeg';
+import { useNavigate } from 'react-router-dom';
 
 export function SignupForm({ toggleForm }) {
   const [email, setEmail] = useState('');
@@ -11,12 +12,15 @@ export function SignupForm({ toggleForm }) {
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const { signup, googleSignIn } = useAuth();
+  const navigate = useNavigate();
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
     const result = await googleSignIn();
     if (!result.success) {
       alert('Error: ' + result.error);
+    } else {
+      navigate('/dashboard');
     }
     setLoading(false);
   };

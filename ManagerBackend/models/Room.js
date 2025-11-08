@@ -6,9 +6,19 @@ const roomSchema = new mongoose.Schema({
     required: [true, 'Please add a room number'],
     trim: true
   },
+  hostel: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Hostel',
+    required: true
+  },
+  manager: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   roomType: {
     type: String,
-    enum: ['single', 'double', 'triple'],
+    enum: ['single', 'double', 'triple', 'shared'],
     required: true
   },
   floorNumber: {
@@ -29,7 +39,7 @@ const roomSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['available', 'occupied', 'partially-occupied', 'maintenance'],
+    enum: ['available', 'occupied', 'maintenance', 'cleaning'],
     default: 'available'
   },
   isSelfContained: {
@@ -41,15 +51,13 @@ const roomSchema = new mongoose.Schema({
   maintenanceReason: {
     type: String,
     default: ''
-  },
-  // This links the room to the manager who owns it
-  manager: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
   }
 }, {
   timestamps: true
 });
+
+// Index for efficient queries
+roomSchema.index({ manager: 1 });
+roomSchema.index({ hostel: 1 });
 
 module.exports = mongoose.model('Room', roomSchema);
