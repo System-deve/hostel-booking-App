@@ -76,6 +76,13 @@ const Sidebar = ({ manager, currentView, onNavigate }) => {
           <div className="user-info">
             <div className="user-name">{manager.profile.fullName}</div>
             <div className="user-role">Hostel Manager</div>
+             <button 
+          className="logout-btn"
+          onClick={""}
+        >
+          <i className="fas fa-sign-out-alt"></i>                                                                                   
+          Logout
+        </button>
           </div>
         </div>
       </div>

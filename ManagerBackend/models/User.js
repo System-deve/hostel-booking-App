@@ -1,64 +1,84 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
   fullName: {
     type: String,
-    required: [true, 'Please add a full name'],
-    trim: true,
-    minlength: [2, 'Name must be at least 2 characters']
+    required: true,
+    trim: true
   },
   email: {
     type: String,
-    required: [true, 'Please add an email'],
+    required: true,
     unique: true,
-    lowercase: true,
     trim: true,
-    match: [
-      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-      'Please add a valid email'
-    ]
+    lowercase: true
   },
   password: {
     type: String,
-    required: [true, 'Please add a password'],
-    minlength: [6, 'Password must be at least 6 characters']
+    required: true,
+    minlength: 6
   },
   phone: {
     type: String,
-    required: [true, 'Please add a phone number'],
     trim: true
   },
   address: {
-    type: String,
-    required: [true, 'Please add an address'],
-    trim: true
-  },
-  profileImage: {
-    type: String,
-    default: ''
+    street: String,
+    city: String,
+    state: String,
+    zipCode: String,
+    country: {
+      type: String,
+      default: 'Uganda'
+    }
   },
   businessName: {
     type: String,
-    required: [true, 'Please add your hostel business name'],
     trim: true
   },
   businessType: {
     type: String,
-    enum: ['hostel', 'apartment', 'dormitory', 'other'],
+    enum: ['hostel', 'apartment', 'boarding_house', 'other'],
     default: 'hostel'
-  },
-  isVerified: {
-    type: Boolean,
-    default: false
   },
   subscription: {
     plan: {
       type: String,
-      enum: ['free', 'basic', 'premium'],
+      enum: ['free', 'basic', 'premium', 'enterprise'],
       default: 'free'
     },
-    expiresAt: Date
+    status: {
+      type: String,
+      enum: ['active', 'inactive', 'expired', 'cancelled'],
+      default: 'active'
+    },
+    startDate: {
+      type: Date,
+      default: Date.now
+    },
+    endDate: Date
+  },
+  profileImage: String,
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  lastLogin: Date,
+  preferences: {
+    notifications: {
+      email: { type: Boolean, default: true },
+      sms: { type: Boolean, default: true },
+      push: { type: Boolean, default: true }
+    },
+    currency: {
+      type: String,
+      default: 'UGX'
+    },
+    language: {
+      type: String,
+      default: 'en'
+    }
   }
 }, {
   timestamps: true
@@ -66,13 +86,10 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) {
-    next();
-    return;
-  }
-
+  if (!this.isModified('password')) return next();
+  
   try {
-    const salt = await bcrypt.genSalt(12);
+    const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (error) {
@@ -80,7 +97,7 @@ userSchema.pre('save', async function(next) {
   }
 });
 
-// Method to compare password for login
+// Compare password method
 userSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
@@ -94,4 +111,4 @@ userSchema.methods.toJSON = function() {
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+export default User;

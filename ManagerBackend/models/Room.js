@@ -1,63 +1,180 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const roomSchema = new mongoose.Schema({
+  // Basic Information
   roomNumber: {
     type: String,
     required: [true, 'Please add a room number'],
+    trim: true,
+    uppercase: true
+  },
+  roomName: {
+    type: String,
     trim: true
   },
-  hostel: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Hostel',
-    required: true
+  
+  // Hostel Information (now part of room data)
+  hostelInfo: {
+    name: {
+      type: String,
+      required: [true, 'Please add hostel name'],
+      trim: true
+    },
+    location: {
+      district: {
+        type: String,
+        required: true
+      },
+      street: String,
+      gpsCoordinates: {
+        lat: Number,
+        lng: Number
+      }
+    },
+    contact: {
+      phone: String,
+      email: String
+    },
+    hostelType: {
+      type: String,
+      enum: ['male', 'female', 'mixed'],
+      default: 'mixed'
+    },
+    hostelCategory: {
+      type: String,
+      enum: ['economy', 'standard', 'premium', 'luxury'],
+      default: 'standard'
+    }
   },
-  manager: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
+  
+  // Room Classification
   roomType: {
     type: String,
-    enum: ['single', 'double', 'triple', 'shared'],
+    enum: ['single', 'double', 'triple', 'quad', 'shared-dorm'],
     required: true
   },
   floorNumber: {
     type: Number,
-    required: true
+    required: true,
+    min: 0
   },
-  price: {
-    type: Number,
-    required: true
-  },
+  
+  // Capacity & Occupancy
   capacity: {
     type: Number,
-    required: true
+    required: true,
+    min: 1
   },
   currentOccupancy: {
     type: Number,
-    default: 0
+    default: 0,
+    min: 0,
+    validate: {
+      validator: function(value) {
+        return value <= this.capacity;
+      },
+      message: 'Current occupancy cannot exceed room capacity'
+    }
   },
-  status: {
-    type: String,
-    enum: ['available', 'occupied', 'maintenance', 'cleaning'],
-    default: 'available'
-  },
+  
+  // Features
   isSelfContained: {
     type: Boolean,
     default: false
   },
+  hasAirConditioning: {
+    type: Boolean,
+    default: false
+  },
+  hasWifi: {
+    type: Boolean,
+    default: false
+  },
+  hasTV: {
+    type: Boolean,
+    default: false
+  },
+  hasFridge: {
+    type: Boolean,
+    default: false
+  },
+  hasBalcony: {
+    type: Boolean,
+    default: false
+  },
+  
+  // Amenities
   amenities: [String],
+  
+  // Pricing
+  price: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  currency: {
+    type: String,
+    default: 'UGX'
+  },
+  deposit: {
+    type: Number,
+    default: 0
+  },
+  
+  // Status
+  status: {
+    type: String,
+    enum: ['available', 'occupied', 'partially-occupied', 'maintenance', 'cleaning'],
+    default: 'available'
+  },
+  
+  // Maintenance
+  maintenance: {
+    required: { type: Boolean, default: false },
+    reason: String,
+    startDate: Date,
+    expectedCompletion: Date,
+    cost: { type: Number, default: 0 },
+    notes: String
+  },
+  
+  // Images
   images: [String],
-  maintenanceReason: {
+  primaryImage: {
     type: String,
     default: ''
+  },
+  
+  // Description
+  description: {
+    type: String,
+    trim: true,
+    maxlength: 500
+  },
+  
+  // Management
+  manager: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   timestamps: true
 });
 
-// Index for efficient queries
-roomSchema.index({ manager: 1 });
-roomSchema.index({ hostel: 1 });
+// Virtuals
+roomSchema.virtual('availableBeds').get(function() {
+  return this.capacity - this.currentOccupancy;
+});
 
-module.exports = mongoose.model('Room', roomSchema);
+roomSchema.virtual('occupancyPercentage').get(function() {
+  return this.capacity > 0 ? (this.currentOccupancy / this.capacity) * 100 : 0;
+});
+
+// Methods
+roomSchema.methods.isAvailable = function() {
+  return this.status === 'available' && this.currentOccupancy < this.capacity;
+};
+
+const Room = mongoose.model('Room', roomSchema);
+export default Room;

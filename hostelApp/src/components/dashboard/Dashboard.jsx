@@ -1,11 +1,11 @@
 // src/components/dashboard/Dashboard.jsx
-import React, { useState, useEffect } from 'react';
+/*import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { hostelManagerStore } from '../../data/store/HostelManagerStore';
 import Sidebar from './Sidebar';
 import StatsGrid from './StatsGrid';
 import QuickActions from './QuickActions';
-import RoomsPage from './RoomsPage';
+import RoomsPage from './looms.jsx';
 import '../../styles/dashboard.css';
 import PaymentsPage from './PaymentsPage.jsx';
 import AnalyticsPage from './AnalyticsPage';
@@ -563,6 +563,529 @@ const AddRoomPage = ({ onSave, onCancel }) => {
           </div>
         </form>
       </div>
+    </div>
+  );
+};
+
+export default Dashboard;*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+// src/components/dashboard/Dashboard.jsx
+import React, { useState, useEffect } from 'react';
+import { authAPI, roomsAPI, tenantsAPI, paymentsAPI } from '../../api/index.js';
+import Sidebar from './Sidebar';
+import StatsGrid from './StatsGrid';
+import QuickActions from './QuickActions';
+import PaymentsPage from './PaymentsPage.jsx';
+import AnalyticsPage from './AnalyticsPage';
+import SettingsPage from './SettingsPage.jsx';
+import RoomsPage from './RoomsPage.jsx';
+import '../../styles/dashboard.css';
+
+const Dashboard = () => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [stats, setStats] = useState({});
+  const [managerRooms, setManagerRooms] = useState([]);
+  const [currentView, setCurrentView] = useState('dashboard');
+  const [managerProfile, setManagerProfile] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    address: '',
+    profileImage: ''
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load current user & manager data
+  useEffect(() => {
+    loadManagerData();
+  }, []);
+
+  const loadManagerData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Get current user
+      const user = await authAPI.getMe();
+      setCurrentUser(user);
+
+      // Load profile
+      setManagerProfile({
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        profileImage: user.profileImage
+      });
+
+      // Load rooms
+      const rooms = await roomsAPI.getRooms();
+      setManagerRooms(rooms);
+
+      // Load dashboard stats
+      const totalRooms = rooms.length;
+      const occupied = rooms.filter(r => r.status === 'occupied').length;
+      const available = rooms.filter(r => r.status === 'available').length;
+      const partiallyOccupied = rooms.filter(r => r.status === 'partially-occupied').length;
+      const maintenance = rooms.filter(r => r.status === 'maintenance').length;
+
+      setStats({
+        totalRooms,
+        occupied,
+        available,
+        partiallyOccupied,
+        maintenance
+      });
+
+    } catch (err) {
+      console.error('Error loading dashboard data:', err);
+      setError('Failed to load dashboard data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Update manager profile
+  const handleProfileUpdate = async (updatedProfile) => {
+    try {
+      await authAPI.updateProfile(updatedProfile);
+      setManagerProfile(updatedProfile);
+      await loadManagerData();
+      return true;
+    } catch (err) {
+      console.error('Profile update failed:', err);
+      return false;
+    }
+  };
+
+  // Handle quick actions
+  const handleQuickAction = (action) => {
+    switch (action) {
+      case 'Add Room':
+      case 'Manage Rooms':
+        setCurrentView('rooms');
+        break;
+      case 'Generate Report':
+        alert('Report generation coming soon!');
+        break;
+      case 'View Analytics':
+        setCurrentView('analytics');
+        break;
+      default:
+        console.log('Action:', action);
+    }
+  };
+
+  // Add a new room
+  const handleAddRoom = async (roomData) => {
+    try {
+      await roomsAPI.createRoom(roomData);
+      alert('Room added successfully!');
+      await loadManagerData();
+      setCurrentView('dashboard');
+    } catch (err) {
+      console.error('Error adding room:', err);
+      alert('Error adding room: ' + err.message);
+    }
+  };
+
+  // Logout
+  const handleLogout = async () => {
+    try {
+      authAPI.logout();
+      window.location.href = '/login';
+    } catch (err) {
+      alert('Error logging out: ' + err.message);
+    }
+  };
+
+  // Main content renderer
+  const renderMainContent = () => {
+    switch (currentView) {
+      case 'rooms':
+        return <RoomsPage rooms={managerRooms} reload={loadManagerData} />;
+      case 'analytics':
+        return <AnalyticsPage />;
+      case 'payments':
+        return <PaymentsPage rooms={managerRooms} />;
+      case 'settings':
+        return (
+          <SettingsPage
+            onProfileUpdate={handleProfileUpdate}
+            initialProfile={managerProfile}
+          />
+        );
+      case 'dashboard':
+      default:
+        return (
+          <>
+            <StatsGrid stats={stats} />
+            <div className="content-grid">
+              <div className="content-column">
+                <ManagerRoomsPreview
+                  rooms={managerRooms}
+                  onViewAll={() => setCurrentView('rooms')}
+                  onAddRoom={() => setCurrentView('rooms')}
+                />
+                <RecentActivity rooms={managerRooms} />
+              </div>
+              <div className="content-column">
+                <QuickActions onActionClick={handleQuickAction} />
+                <UpcomingCheckouts rooms={managerRooms} />
+              </div>
+            </div>
+          </>
+        );
+    }
+  };
+
+  const getHeaderTitle = () => {
+    const titles = {
+      dashboard: 'Dashboard',
+      rooms: 'Room Management',
+      analytics: 'Analytics',
+      payments: 'Payments',
+      settings: 'Settings'
+    }; 
+    return titles[currentView] || 'Dashboard';
+  };
+
+  const getHeaderSubtitle = () => {
+    const subtitles = {
+      dashboard: `Welcome back, ${managerProfile.fullName || ''}! Manage your ${managerRooms.length} rooms`,
+      rooms: 'Manage all your rooms, tenants, and maintenance',
+      analytics: 'Detailed insights and performance metrics',
+      payments: 'Track payments and revenue',
+      settings: 'Manage your account settings'
+    };
+    return subtitles[currentView] || 'Welcome back!';
+  };
+
+  const showAddRoomButton = currentView === 'dashboard' || currentView === 'rooms';
+
+  if (loading) return <div className="loader">Loading dashboard...</div>;
+  if (error) return <div className="error">{error}</div>;
+
+  return (
+    <div className="dashboard-container">
+      <Sidebar
+        manager={{
+          profile: managerProfile
+        }}
+        currentView={currentView}
+        onNavigate={setCurrentView}
+        onLogout={handleLogout}
+      />
+      <main className="main-content">
+        <header className="content-header">
+          <div className="header-left">
+            <h1 className="page-title">{getHeaderTitle()}</h1>
+            <p className="page-subtitle">{getHeaderSubtitle()}</p>
+          </div>
+          {showAddRoomButton && (
+            <div className="header-actions">
+              <button
+                className="btn btn-primary"
+                onClick={() => setCurrentView('rooms')}
+              >
+                <i className="fas fa-bed"></i> Manage Rooms
+              </button>
+            </div>
+          )}
+        </header>
+
+        {renderMainContent()}
+      </main>
+    </div>
+  );
+};
+
+export default Dashboard;*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/components/dashboard/Dashboard.jsx
+import React, { useState, useEffect, useCallback } from 'react';
+import { roomsAPI } from '../../api/rooms.js';
+import { tenantsAPI } from '../../api/tenants.js';
+import { maintenanceAPI } from '../../api/maintenance.js';
+import { bookingsAPI } from '../../api/bookings.js';
+import { authAPI } from '../../api/auth.js';
+import Sidebar from './Sidebar';
+import StatsGrid from './StatsGrid';
+import QuickActions from './QuickActions';
+import RoomsPage from './RoomsPage.jsx';
+import PaymentsPage from './PaymentsPage.jsx';
+import AnalyticsPage from './AnalyticsPage';
+import SettingsPage from './SettingsPage.jsx';
+import '../../styles/dashboard.css';
+
+const Dashboard = () => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [managerProfile, setManagerProfile] = useState({});
+  const [managerRooms, setManagerRooms] = useState([]);
+  const [stats, setStats] = useState({});
+  const [currentView, setCurrentView] = useState('dashboard');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Load all dashboard data
+
+
+  const loadDashboardData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // 1. Current user / manager profile
+      const user = await authAPI.getMe();
+      setCurrentUser(user);
+      setManagerProfile({
+        fullName: currentUser?.fullName || '',
+        email: currentUser?.email || '',
+        phone: currentUser?.phone || '',
+        address: currentUser?.address || '',
+        profileImage: currentUser?.profileImage || ''
+      });
+
+      // 2. Rooms
+      let rooms = await roomsAPI.getRooms();
+      rooms = Array.isArray(rooms) ? rooms : [];
+      setManagerRooms(rooms);
+
+      // 3. Tenants
+      let tenants = [];
+      for (const room of rooms) {
+        if (room.id) {
+          const roomTenants = room.tenants || [];
+          tenants.push(...roomTenants);
+        }
+      }
+
+      // 4. Maintenance
+      let maintenanceRequests = await maintenanceAPI.getMaintenanceRequests();
+      maintenanceRequests = Array.isArray(maintenanceRequests) ? maintenanceRequests : [];
+
+      // 5. Bookings (optional)
+      let bookings = await bookingsAPI.getBookings();
+      bookings = Array.isArray(bookings) ? bookings : [];
+
+      // 6. Calculate dashboard stats
+      const totalRooms = rooms.length;
+      const occupied = rooms.filter(r => r.status === 'occupied').length;
+      const available = rooms.filter(r => r.status === 'available').length;
+      const partiallyOccupied = rooms.filter(r => r.status === 'partially-occupied').length;
+      const maintenance = rooms.filter(r => r.status === 'maintenance').length;
+
+      setStats({
+        manager: currentUser.fullName || 'Manager',
+        rooms: totalRooms,
+        tenants: tenants.length,
+        issues: maintenanceRequests.length,
+        totalRooms,
+        occupied,
+        available,
+        partiallyOccupied,
+        maintenance,
+        bookings: bookings.length
+      });
+
+    } catch (err) {
+      console.error('Error loading dashboard data:', err);
+      setError('Failed to load dashboard data');
+    } finally {
+      setLoading(false);
+    }
+  }, [currentUser]);
+
+
+    useEffect(() => {
+    loadDashboardData();
+  }, [loadDashboardData]);
+  // Update manager profile
+  const handleProfileUpdate = async (updatedProfile) => {
+    try {
+      await authAPI.updateProfile(updatedProfile);
+      setManagerProfile(updatedProfile);
+      await loadDashboardData();
+      return true;
+    } catch (err) {
+      console.error('Profile update failed:', err);
+      return false;
+    }
+  };
+
+  // Quick actions
+  const handleQuickAction = (action) => {
+    switch (action) {
+      case 'Add Room':
+      case 'Manage Rooms':
+        setCurrentView('rooms');
+        break;
+      case 'Generate Report':
+        alert('Report generation coming soon!');
+        break;
+      case 'View Analytics':
+        setCurrentView('analytics');
+        break;
+      default:
+        console.log('Unknown action:', action);
+    }
+  };
+
+  // Add a new room
+const handleAddRoom = async (roomData) => {
+    try {
+      await roomsAPI.createRoom(roomData);
+      alert('Room added successfully!');
+      await loadDashboardData();
+      setCurrentView('dashboard');
+    } catch (err) {
+      console.error('Error adding room:', err);
+      alert('Error adding room: ' + err.message);
+    }
+  };
+
+  // Logout
+  const handleLogout = async () => {
+    try {
+      await authAPI.logout();
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    } catch (err) {
+      alert('Error logging out: ' + err.message);
+    }
+  };
+
+  // Render main content based on view
+  const renderMainContent = () => {
+    switch (currentView) {
+      case 'rooms':
+        return <RoomsPage rooms={managerRooms} reload={loadDashboardData} />;
+      case 'analytics':
+        return <AnalyticsPage />;
+      case 'payments':
+        return <PaymentsPage rooms={managerRooms} />;
+      case 'settings':
+        return <SettingsPage
+          onProfileUpdate={handleProfileUpdate}
+          initialProfile={managerProfile}
+        />;
+      case 'dashboard':
+      default:
+        return (
+          <>
+            <StatsGrid stats={stats} />
+            <div className="content-grid">
+              <div className="content-column">
+               {/* <ManagerRoomsPreview
+                  rooms={managerRooms}
+                  onViewAll={() => setCurrentView('rooms')}
+                  onAddRoom={() => setCurrentView('rooms')}
+                /> */}
+                <RecentActivity rooms={managerRooms} />
+              </div>
+              <div className="content-column">
+                <QuickActions onActionClick={handleQuickAction} />
+                <UpcomingCheckouts rooms={managerRooms} />
+              </div>
+            </div>
+          </>
+        );
+    }
+  };
+
+  const getHeaderTitle = () => {
+    const titles = {
+      dashboard: 'Dashboard',
+      rooms: 'Room Management',
+      analytics: 'Analytics',
+      payments: 'Payments',
+      settings: 'Settings'
+    }; 
+    return titles[currentView] || 'Dashboard';
+  };
+
+  const getHeaderSubtitle = () => {
+    const subtitles = {
+      dashboard: `Welcome back, ${managerProfile.fullName || ''}! Manage your ${managerRooms.length} rooms`,
+      rooms: 'Manage all your rooms, tenants, and maintenance',
+      analytics: 'Detailed insights and performance metrics',
+      payments: 'Track payments and revenue',
+      settings: 'Manage your account settings'
+    };
+    return subtitles[currentView] || 'Welcome back!';
+  };
+
+  const showAddRoomButton = currentView === 'dashboard' || currentView === 'rooms';
+
+  if (loading) return <div className="loader">Loading dashboard...</div>;
+  if (error) return <div className="error">{error}</div>;
+
+  return (
+    <div className="dashboard-container">
+      <Sidebar
+        manager={{
+          profile: managerProfile
+        }}
+        currentView={currentView}
+        onNavigate={setCurrentView}     />
+      <main className="main-content">
+        <header className="content-header">
+          <div className="header-left">
+            <h1 className="page-title">{getHeaderTitle()}</h1>
+            <p className="page-subtitle">{getHeaderSubtitle()}</p>
+          </div>
+          {showAddRoomButton && (
+            <div className="header-actions">
+              <button
+                className="btn btn-primary"
+                onClick={() => setCurrentView('rooms')}
+              >
+                <i className="fas fa-bed"></i> Manage Rooms
+              </button>
+            </div>
+          )}
+        </header>
+
+        {renderMainContent()}
+      </main>
     </div>
   );
 };
