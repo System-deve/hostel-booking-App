@@ -17,6 +17,7 @@ const HostelRooms = () => {
   const [hostelInfo, setHostelInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -25,7 +26,7 @@ const HostelRooms = () => {
         setError(null);
         
         const response = await fetch(
-          `http://localhost:5001/api/rooms/hostel/${hostelId}`
+          `${BACKEND_URL}/api/rooms/hostel/${hostelId}`
         );
         
         if (!response.ok) {
