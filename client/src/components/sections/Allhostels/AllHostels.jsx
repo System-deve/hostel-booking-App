@@ -9,6 +9,7 @@ const MostAffordableHostels = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const navigate = useNavigate();
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchAllHostels = async () => {
@@ -16,7 +17,8 @@ const MostAffordableHostels = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`http://localhost:5001/api/hostels/allHostels`);
+        const response = await fetch(`${BACKEND_URL}/api/hostels/allHostels`);
+        
         if (!response.ok) {
           throw new Error(`HTTP Error! status: ${response.status}`) // Fixed string concatenation
         }

@@ -1,7 +1,7 @@
-// src/components/dashboard/RoomsPage.jsx
 import React, { useState, useEffect } from 'react';
-import { hostelManagerStore } from '../../data/store/HostelManagerStore';
 import './RoomsPage.css';
+
+const API_BASE = 'http://localhost:5000/api';
 
 const RoomsPage = () => {
   const [rooms, setRooms] = useState([]);
@@ -17,6 +17,21 @@ const RoomsPage = () => {
   const [showRoomDetails, setShowRoomDetails] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Get auth token
+  const getToken = () => localStorage.getItem('token');
+
+  // API call function
+  const apiCall = async (url, options = {}) => {
+    const response = await fetch(`${API_BASE}${url}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
+      ...options
+    });
+    return await response.json();
+  };
+
   useEffect(() => {
     loadRooms();
   }, []);
@@ -25,19 +40,16 @@ const RoomsPage = () => {
     const filterRooms = () => {
       let filtered = rooms;
 
-      // Apply status filter
       if (statusFilter !== 'all') {
         filtered = filtered.filter(room => room.status === statusFilter);
       }
 
-      // Apply search filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         filtered = filtered.filter(room => 
           room.roomNumber.toLowerCase().includes(query) ||
-          room.tenants.some(tenant => tenant.name.toLowerCase().includes(query)) ||
-          room.roomType.toLowerCase().includes(query) ||
-          room.hostelName.toLowerCase().includes(query)
+          room.tenants?.some(tenant => tenant.name.toLowerCase().includes(query)) ||
+          room.roomType.toLowerCase().includes(query)
         );
       }
 
@@ -46,11 +58,15 @@ const RoomsPage = () => {
     filterRooms();
   }, [rooms, searchQuery, statusFilter]);
 
-  const loadRooms = () => {
+  const loadRooms = async () => {
     setLoading(true);
     try {
-      const managerRooms = hostelManagerStore.getManagerRooms();
-      setRooms(managerRooms);
+      const result = await apiCall('/rooms');
+      if (result.success) {
+        setRooms(result.data);
+      } else {
+        throw new Error(result.message);
+      }
     } catch (error) {
       console.error('Error loading rooms:', error);
       alert('Error loading rooms: ' + error.message);
@@ -59,16 +75,20 @@ const RoomsPage = () => {
     }
   };
 
-  const handleAddRoom = (roomData) => {
+  const handleAddRoom = async (roomData) => {
     setLoading(true);
     try {
-      const newRoom = hostelManagerStore.addRoom(roomData);
-      if (newRoom) {
-        loadRooms();
+      const result = await apiCall('/rooms', {
+        method: 'POST',
+        body: JSON.stringify(roomData)
+      });
+      
+      if (result.success) {
+        await loadRooms();
         setShowAddRoomModal(false);
         alert('Room added successfully!');
       } else {
-        alert('Failed to add room: ' + hostelManagerStore.error);
+        throw new Error(result.message);
       }
     } catch (error) {
       alert('Error adding room: ' + error.message);
@@ -77,17 +97,21 @@ const RoomsPage = () => {
     }
   };
 
-  const handleAddTenant = (tenantData) => {
+  const handleAddTenant = async (tenantData) => {
     setLoading(true);
     try {
-      const tenantId = hostelManagerStore.checkInTenant(selectedRoom.id, tenantData);
-      if (tenantId) {
-        loadRooms();
+      const result = await apiCall(`/rooms/${selectedRoom._id}/tenants`, {
+        method: 'POST',
+        body: JSON.stringify(tenantData)
+      });
+      
+      if (result.success) {
+        await loadRooms();
         setShowAddTenantModal(false);
         setSelectedRoom(null);
         alert('Tenant checked in successfully!');
       } else {
-        alert('Failed to check in tenant: ' + hostelManagerStore.error);
+        throw new Error(result.message);
       }
     } catch (error) {
       alert('Error checking in tenant: ' + error.message);
@@ -96,22 +120,22 @@ const RoomsPage = () => {
     }
   };
 
-  const handleAddPayment = (paymentData) => {
+  const handleAddPayment = async (paymentData) => {
     setLoading(true);
     try {
-      const paymentId = hostelManagerStore.addPayment(
-        selectedRoom.id, 
-        selectedTenant.id, 
-        paymentData
-      );
-      if (paymentId) {
-        loadRooms();
+      const result = await apiCall(`/rooms/${selectedRoom._id}/tenants/${selectedTenant._id}/payments`, {
+        method: 'POST',
+        body: JSON.stringify(paymentData)
+      });
+      
+      if (result.success) {
+        await loadRooms();
         setShowAddPaymentModal(false);
         setSelectedRoom(null);
         setSelectedTenant(null);
         alert('Payment added successfully!');
       } else {
-        alert('Failed to add payment: ' + hostelManagerStore.error);
+        throw new Error(result.message);
       }
     } catch (error) {
       alert('Error adding payment: ' + error.message);
@@ -120,17 +144,21 @@ const RoomsPage = () => {
     }
   };
 
-  const handleUploadImages = (roomId, images) => {
+  const handleUploadImages = async (roomId, images) => {
     setLoading(true);
     try {
-      const success = hostelManagerStore.addRoomImages(roomId, images);
-      if (success) {
-        loadRooms();
+      const result = await apiCall(`/rooms/${roomId}/images`, {
+        method: 'POST',
+        body: JSON.stringify({ images })
+      });
+      
+      if (result.success) {
+        await loadRooms();
         setShowImageUploadModal(false);
         setSelectedRoom(null);
         alert('Images uploaded successfully!');
       } else {
-        alert('Failed to upload images: ' + hostelManagerStore.error);
+        throw new Error(result.message);
       }
     } catch (error) {
       alert('Error uploading images: ' + error.message);
@@ -139,16 +167,24 @@ const RoomsPage = () => {
     }
   };
 
-  const handleDeleteImage = (roomId, imageIndex) => {
+  const handleDeleteImage = async (roomId, imageIndex) => {
     if (window.confirm('Are you sure you want to delete this image?')) {
       setLoading(true);
       try {
-        const success = hostelManagerStore.deleteRoomImage(roomId, imageIndex);
-        if (success) {
-          loadRooms();
+        // For simplicity, we'll re-upload images without the deleted one
+        const room = rooms.find(r => r._id === roomId);
+        const updatedImages = room.images.filter((_, index) => index !== imageIndex);
+        
+        const result = await apiCall(`/rooms/${roomId}/images`, {
+          method: 'POST',
+          body: JSON.stringify({ images: updatedImages })
+        });
+        
+        if (result.success) {
+          await loadRooms();
           alert('Image deleted successfully!');
         } else {
-          alert('Failed to delete image: ' + hostelManagerStore.error);
+          throw new Error(result.message);
         }
       } catch (error) {
         alert('Error deleting image: ' + error.message);
@@ -158,16 +194,19 @@ const RoomsPage = () => {
     }
   };
 
-  const handleCheckOutTenant = (roomId, tenantId) => {
+  const handleCheckOutTenant = async (roomId, tenantId) => {
     if (window.confirm('Are you sure you want to check out this tenant?')) {
       setLoading(true);
       try {
-        const success = hostelManagerStore.checkOutTenant(roomId, tenantId);
-        if (success) {
-          loadRooms();
+        const result = await apiCall(`/rooms/${roomId}/tenants/${tenantId}`, {
+          method: 'DELETE'
+        });
+        
+        if (result.success) {
+          await loadRooms();
           alert('Tenant checked out successfully!');
         } else {
-          alert('Failed to check out tenant: ' + hostelManagerStore.error);
+          throw new Error(result.message);
         }
       } catch (error) {
         alert('Error checking out tenant: ' + error.message);
@@ -177,15 +216,19 @@ const RoomsPage = () => {
     }
   };
 
-  const handleUpdateRoomStatus = (roomId, newStatus) => {
+  const handleUpdateRoomStatus = async (roomId, newStatus) => {
     setLoading(true);
     try {
-      const success = hostelManagerStore.updateRoomStatus(roomId, newStatus);
-      if (success) {
-        loadRooms();
+      const result = await apiCall(`/rooms/${roomId}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: newStatus })
+      });
+      
+      if (result.success) {
+        await loadRooms();
         alert('Room status updated successfully!');
       } else {
-        alert('Failed to update room status: ' + hostelManagerStore.error);
+        throw new Error(result.message);
       }
     } catch (error) {
       alert('Error updating room status: ' + error.message);
@@ -194,16 +237,19 @@ const RoomsPage = () => {
     }
   };
 
-  const handleDeleteRoom = (roomId) => {
+  const handleDeleteRoom = async (roomId) => {
     if (window.confirm('Are you sure you want to delete this room? This action cannot be undone.')) {
       setLoading(true);
       try {
-        const success = hostelManagerStore.deleteRoom(roomId);
-        if (success) {
-          loadRooms();
+        const result = await apiCall(`/rooms/${roomId}`, {
+          method: 'DELETE'
+        });
+        
+        if (result.success) {
+          await loadRooms();
           alert('Room deleted successfully!');
         } else {
-          alert('Cannot delete room. Room may be occupied or does not exist.');
+          throw new Error(result.message);
         }
       } catch (error) {
         alert('Error deleting room: ' + error.message);
@@ -252,6 +298,17 @@ const RoomsPage = () => {
       </div>
     );
   }
+
+
+
+
+
+
+
+
+  // ... REST OF YOUR EXISTING JSX CODE REMAINS EXACTLY THE SAME ...
+  // RoomCard, AddRoomModal, AddTenantModal, AddPaymentModal, ImageUploadModal, RoomDetailsModal
+  // ALL THESE COMPONENTS STAY EXACTLY AS YOU HAD THEM
 
   return (
     <div className="page-container">
@@ -339,7 +396,7 @@ const RoomsPage = () => {
           <div className="stat-label">Occupied</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">{rooms.reduce((sum, room) => sum + room.tenants.length, 0)}</div>
+          <div className="stat-value">{rooms.reduce((sum, room) => sum + (room.tenants?.length || 0), 0)}</div>
           <div className="stat-label">Total Tenants</div>
         </div>
       </div>
@@ -349,7 +406,7 @@ const RoomsPage = () => {
         {filteredRooms.length > 0 ? (
           filteredRooms.map(room => (
             <RoomCard 
-              key={room.id}
+              key={room._id}
               room={room}
               onViewDetails={() => {
                 setSelectedRoom(room);
@@ -394,7 +451,7 @@ const RoomsPage = () => {
         )}
       </div>
 
-      {/* Add Room Modal */}
+      {/* Modals - USE YOUR EXISTING MODAL COMPONENTS */}
       {showAddRoomModal && (
         <AddRoomModal
           onSave={handleAddRoom}
@@ -403,7 +460,6 @@ const RoomsPage = () => {
         />
       )}
 
-      {/* Add Tenant Modal */}
       {showAddTenantModal && selectedRoom && (
         <AddTenantModal
           room={selectedRoom}
@@ -416,7 +472,6 @@ const RoomsPage = () => {
         />
       )}
 
-      {/* Add Payment Modal */}
       {showAddPaymentModal && selectedRoom && selectedTenant && (
         <AddPaymentModal
           room={selectedRoom}
@@ -431,7 +486,6 @@ const RoomsPage = () => {
         />
       )}
 
-      {/* Image Upload Modal */}
       {showImageUploadModal && selectedRoom && (
         <ImageUploadModal
           room={selectedRoom}
@@ -444,7 +498,6 @@ const RoomsPage = () => {
         />
       )}
 
-      {/* Room Details Modal */}
       {showRoomDetails && selectedRoom && (
         <RoomDetailsModal
           room={selectedRoom}
@@ -478,7 +531,9 @@ const RoomsPage = () => {
   );
 };
 
-// Room Card Component - UPDATED WITH IMAGE SUPPORT
+// KEEP ALL YOUR EXISTING COMPONENTS EXACTLY AS THEY WERE:
+// RoomCard, AddRoomModal, AddTenantModal, AddPaymentModal, ImageUploadModal, RoomDetailsModal
+
 const RoomCard = ({ 
   room, 
   onViewDetails, 
@@ -492,7 +547,7 @@ const RoomCard = ({
   getStatusText,
   getRoomTypeText,
   loading 
-}) => {
+}) =>  {
   const availableSpots = room.capacity - room.currentOccupancy;
   const displayImage = room.images && room.images.length > 0 ? room.images[0] : null;
 
@@ -696,87 +751,87 @@ const RoomCard = ({
   );
 };
 
-// Add Room Modal Component - UPDATED WITH IMAGE FIELD
 const AddRoomModal = ({ onSave, onClose, loading }) => {
-  const [formData, setFormData] = useState({
-    roomNumber: '',
-    roomType: 'single',
-    floorNumber: 1,
-    price: '',
-    hostelId: 'hostel_001',
-    isSelfContained: true,
-    images: []
-  });
-
-  const [imagePreviews, setImagePreviews] = useState([]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (!formData.roomNumber || !formData.price) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
-    const roomData = {
-      ...formData,
-      price: parseInt(formData.price),
-      capacity: formData.roomType === 'single' ? 1 : formData.roomType === 'double' ? 2 : 3,
-      hostelName: formData.hostelId === 'hostel_001' ? 'Green Valley Hostel' : 'Sunrise Hostels',
-      currentOccupancy: 0,
-      status: 'available'
-    };
-
-    onSave(roomData);
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length > 5) {
-      alert('You can only upload up to 5 images');
-      return;
-    }
-
-    const newImages = [];
-    const newPreviews = [];
-
-    files.forEach(file => {
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          newPreviews.push(e.target.result);
-          newImages.push(e.target.result);
-          
-          if (newPreviews.length === files.length) {
-            setImagePreviews(prev => [...prev, ...newPreviews]);
-            setFormData(prev => ({
-              ...prev,
-              images: [...prev.images, ...newImages]
-            }));
-          }
-        };
-        reader.readAsDataURL(file);
-      }
+  // ... YOUR EXISTING AddRoomModal CODE ...
+    const [formData, setFormData] = useState({
+      roomNumber: '',
+      roomType: 'single',
+      floorNumber: 1,
+      price: '',
+      hostelId: 'hostel_001',
+      isSelfContained: true,
+      images: []
     });
-  };
-
-  const removeImage = (index) => {
-    setImagePreviews(prev => prev.filter((_, i) => i !== index));
-    setFormData(prev => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index)
-    }));
-  };
-
-  return (
+  
+    const [imagePreviews, setImagePreviews] = useState([]);
+  
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      
+      if (!formData.roomNumber || !formData.price) {
+        alert('Please fill in all required fields');
+        return;
+      }
+  
+      const roomData = {
+        ...formData,
+        price: parseInt(formData.price),
+        capacity: formData.roomType === 'single' ? 1 : formData.roomType === 'double' ? 2 : 3,
+        hostelName: formData.hostelId === 'hostel_001' ? 'Green Valley Hostel' : 'Sunrise Hostels',
+        currentOccupancy: 0,
+        status: 'available'
+      };
+  
+      onSave(roomData);
+    };
+  
+    const handleChange = (e) => {
+      const { name, value, type, checked } = e.target;
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }));
+    };
+  
+    const handleImageUpload = (e) => {
+      const files = Array.from(e.target.files);
+      if (files.length > 5) {
+        alert('You can only upload up to 5 images');
+        return;
+      }
+  
+      const newImages = [];
+      const newPreviews = [];
+  
+      files.forEach(file => {
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            newPreviews.push(e.target.result);
+            newImages.push(e.target.result);
+            
+            if (newPreviews.length === files.length) {
+              setImagePreviews(prev => [...prev, ...newPreviews]);
+              setFormData(prev => ({
+                ...prev,
+                images: [...prev.images, ...newImages]
+              }));
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    };
+  
+    const removeImage = (index) => {
+      setImagePreviews(prev => prev.filter((_, i) => i !== index));
+      setFormData(prev => ({
+        ...prev,
+        images: prev.images.filter((_, i) => i !== index)
+      }));
+    };
+  
+    return (
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
@@ -929,6 +984,7 @@ const AddRoomModal = ({ onSave, onClose, loading }) => {
       </div>
     </div>
   );
+
 };
 
 // Image Upload Modal Component
@@ -1263,7 +1319,6 @@ const AddTenantModal = ({ room, onSave, onClose, loading }) => {
     </div>
   );
 };
-
 // Add Payment Modal Component (unchanged, but included for completeness)
 const AddPaymentModal = ({ room, tenant, onSave, onClose, loading }) => {
   const [formData, setFormData] = useState({
@@ -1387,6 +1442,23 @@ const AddPaymentModal = ({ room, tenant, onSave, onClose, loading }) => {
     </div>
   );
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Room Details Modal Component - UPDATED WITH IMAGE GALLERY
 const RoomDetailsModal = ({ 

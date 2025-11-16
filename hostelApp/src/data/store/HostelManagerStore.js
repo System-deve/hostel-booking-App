@@ -6,7 +6,6 @@ import {
   sampleReviews, 
   samplePayments 
 } from './sampleData';
-import { auth } from '../../utils/firebase'; // Import auth directly
 // Sample rooms data with multiple tenants for shared rooms
 const sampleRooms = [
   {
@@ -227,36 +226,22 @@ const sampleIssues = [
 ];
 
 export class HostelManagerStore {
-  constructor() {
-   
-    this.manager = this.loadManagerData();
-    this.manager = sampleManagerProfile;
-    this.hostels = sampleHostels;
-    this.bookings = sampleBookings;
-    this.reviews = sampleReviews;
-    this.payments = samplePayments;
-    this.rooms = this.initializeManagerRooms();
-    this.issues = sampleIssues;
-    this.isLoading = false;
-    this.error = null;
-      // Listen for auth state changes
-    this.setupAuthListener();
-    
-    // Initialize localStorage
-    this.initializeStorage();
-  }
-    setupAuthListener() {
-    // Listen for authentication state cha
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        this.manager = this.loadManagerData(user);
-        // You can reload other user-specific data here if needed
-      } else {
-        this.manager = null;
-        // Clear user-specific data if needed
-      }
-    });
-  }
+constructor() {
+  this.manager = this.loadManagerData(); // ✅ load from localStorage
+  this.hostels = sampleHostels;
+  this.bookings = sampleBookings;
+  this.reviews = sampleReviews;
+  this.payments = samplePayments;
+  this.rooms = this.initializeManagerRooms();
+  this.issues = sampleIssues;
+  this.isLoading = false;
+  this.error = null;
+
+  // Initialize localStorage
+  this.initializeStorage();
+}
+
+
 
   // Initialize localStorage for data persistence
   initializeStorage() {
@@ -277,39 +262,40 @@ export class HostelManagerStore {
       console.warn('localStorage unavailable:', err);
     }
   }
- loadManagerData(user = null) {
-    // Use the provided user or get from auth
-    const currentUser = user || auth.currentUser;
-    
-    if (currentUser) {
-      return {
-        id: currentUser.uid,
-        profile: {
-          fullName: currentUser.displayName || 'Hostel Manager',
-          email: currentUser.email,
-          phone: '',
-          address: '',
-          profileImage: currentUser.photoURL || ''
-        },
-        hostels: ['hostel_001', 'hostel_002'],
-        joinDate: new Date().toISOString()
-      };
-    }
-   
-    // Return a default manager for demo purposes when no user is logged in
+loadManagerData() {
+  // Try to get the current user from localStorage
+  const currentUser = JSON.parse(localStorage.getItem('user'));
+
+  if (currentUser) {
     return {
-      id: 'demo_manager',
+      id: currentUser._id || currentUser.id || 'demo_manager',
       profile: {
-        fullName: 'Demo Manager',
-        email: 'demo@hostelmanager.com',
-        phone: '+256 700 000 000',
-        address: 'Kampala, Uganda',
-        profileImage: ''
+        fullName: currentUser.fullName || 'Hostel Manager',
+        email: currentUser.email || '',
+        phone: currentUser.phone || '',
+        address: currentUser.address || '',
+        profileImage: currentUser.profileImage || ''
       },
       hostels: ['hostel_001', 'hostel_002'],
-      joinDate: new Date().toISOString()
+      joinDate: currentUser.joinDate || new Date().toISOString()
     };
   }
+
+  // Default manager if no user is logged in
+  return {
+    id: 'demo_manager',
+    profile: {
+      fullName: 'Demo Manager',
+      email: 'demo@hostelmanager.com',
+      phone: '+256 700 000 000',
+      address: 'Kampala, Uganda',
+      profileImage: ''
+    },
+    hostels: ['hostel_001', 'hostel_002'],
+    joinDate: new Date().toISOString()
+  };
+}
+
     
 
   // Save data to localStorage
