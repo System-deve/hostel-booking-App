@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './homePage.module.css';
+import styles from './HomePage.module.css';
 import Hero from '../../components/Hero/hero'
 import TopRatedHostels from '../../components/sections/TopRatedHostels/TopRatedHostels';
 import PopularHostels from '../../components/sections/PopularHostels/PopularHostels';
