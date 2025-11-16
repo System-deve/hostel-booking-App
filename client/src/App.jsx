@@ -5,7 +5,7 @@ import HostelRooms from './pages/Room/HostelRoom'
 import RoomDetails from './pages/Room/RoomDetail'
 import SearchResults from './pages/SearchResults/SearchResult'
 import Header from './components/header/header'
-import Footer from './components/Footer/Footer'
+import Footer from './components/Footer/footer'
 
 
 function App() {
