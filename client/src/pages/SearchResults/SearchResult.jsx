@@ -11,6 +11,8 @@ const SearchResults = () => {
   const [error, setError] = useState(null);
   const [searchedLocation, setSearchedLocation] = useState('');
   const [isPartialMatch, setIsPartialMatch] = useState(false);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 
   useEffect(() => {
     fetchRooms();
@@ -38,7 +40,7 @@ const SearchResults = () => {
       if (roomType) params.append('roomType', roomType);
 
       const queryString = params.toString();
-      const url = `http://localhost:5001/api/rooms/available${queryString ? `?${queryString}` : ''}`;
+      const url = `${BACKEND_URL}/api/rooms/available${queryString ? `?${queryString}` : ''}`;
       
       console.log('Fetching from URL:', url);
       

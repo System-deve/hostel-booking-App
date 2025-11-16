@@ -26,6 +26,7 @@ const RoomDetails = () => {
   const [error, setError] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAllPhotos, setShowAllPhotos] = useState(false);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -34,7 +35,7 @@ const RoomDetails = () => {
         setError(null);
 
         const response = await fetch(
-          `http://localhost:5001/api/rooms/${roomId}`
+          `${BACKEND_URL}/api/rooms/${roomId}`
         );
 
         if (!response.ok) {
