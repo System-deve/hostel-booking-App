@@ -11,6 +11,7 @@ const PopularHostels = () => {
   const [Loading, setLoading]=useState(true)
   const [error, setError]= useState(null)
   const navigate = useNavigate()
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(()=>{
 
@@ -18,7 +19,7 @@ const PopularHostels = () => {
       try{
         setLoading(true);
         setError(null)
-        const response = await fetch(`http://localhost:5001/api/hostels/locationBasedHostels`);
+        const response = await fetch(`${BACKEND_URL}/api/hostels/locationBasedHostels`);
         if(!response.ok){
           console.log("error in fetching string")
           throw new Error(`HTTP Error! status ${response.status}` )

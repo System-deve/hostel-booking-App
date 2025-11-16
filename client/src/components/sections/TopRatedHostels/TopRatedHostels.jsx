@@ -9,14 +9,16 @@ const TopRatedHostels = () => {
   const[loading, setLoading]=useState(true);
   const[error, setError]=useState(null)
   const navigate =useNavigate();
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 
   useEffect(()=>{
     const fetchTopRatedHostel =async()=>{
       try{
         setLoading(true);
         setError(null)
-        const response =await fetch(`http://localhost:5001/api/hostels/topRated`);
-        if(!response.ok){
+        const response =await fetch(`${BACKEND_URL}/api/hostels/topRated`);
+        if(!response.ok){ 
           console.log('Error Fetching')
           throw new Error(`HTTP error! status: ${response.status}`);
         }
